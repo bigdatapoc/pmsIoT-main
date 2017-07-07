@@ -1,0 +1,25 @@
+version: '2'
+services:
+
+# Eureka service registry
+  pmsiot-eureka:
+    build: eureka-server
+    ports:
+    - "8761:8761"
+
+# processing-engine microservice 
+  pmsiot-processing-engine:
+    build: processing-engine
+    ports:
+    - "8072:8072"    
+    links:
+    - eureka
+
+# messaging-rest-api microservice to convert message from MQTT to KAKFA 
+  pmsiot-messaging-rest-api:
+    build: messaging-rest-api
+    ports:
+    - "8081:8081"    
+    links:
+    - eureka
+
