@@ -1,2 +1,2 @@
-# emsIoT
-Employe Monitoring System(IoT)
+# pmsIoT
+People Monitoring System(IoT)
