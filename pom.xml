@@ -19,6 +19,7 @@
 	<modules>
 		<module>pmsiot-processing-engine</module>
 		<module>pmsiot-messaging-rest-api</module>
+		<module>pmsiot-mqtt-connector</module>
 		<module>pmsiot-sink</module>
 		<module>pmsiot-operations</module>
 		<module>pmsiot-eureka-server</module>
