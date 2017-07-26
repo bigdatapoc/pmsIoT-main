@@ -1,4 +1,6 @@
-package com.hcl.microservicepoc;
+
+
+package com.hcl.pmsiot.messaging;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,15 +16,20 @@ import springfox.documentation.spring.web.plugins.Docket;
 public class SwaggerConfig {
 
 	@Bean
-	public Docket api() {
-		return new Docket(DocumentationType.SWAGGER_2).select()
-				.apis(RequestHandlerSelectors.basePackage("com.hcl.microservicepoc.web")).paths(PathSelectors.any())
-				.build().apiInfo(apiInfo());
-
+	public Docket api(){
+		return new Docket(DocumentationType.SWAGGER_2)
+				.select()
+				.apis(RequestHandlerSelectors.basePackage("com.demo.mqttKafkaRestApp.controller"))
+				.paths(PathSelectors.any())
+				.build()
+				.apiInfo(apiInfo());
 	}
-
-	private ApiInfo apiInfo() {
-		return new ApiInfoBuilder().title("FMSss - Microservice APIs").description("APIs for FMS - Microservice")
-				.version("1.0.0").build();
-	}
+	
+	private ApiInfo apiInfo(){
+		return new ApiInfoBuilder()
+				.title("MqttKafkaRestApp APIs")
+				.description("APIs for MqttKafkaRestApp")
+				.version("1.0.0")
+				.build();
+	}	
 }
