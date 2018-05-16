@@ -9,28 +9,27 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hcl.pmsiot.messaging.dto.MessageDTO;
-import com.hcl.pmsiot.messaging.utility.KafkaConsumer;
+import com.hcl.pmsiot.messaging.utility.KafkaSubscriber;
 import com.hcl.pmsiot.messaging.utility.KafkaProducer;
-
 
 @RestController
 public class MqttKafkaController {
 
-	
-	@RequestMapping(value = "/pubSubMqttToKafka", method = RequestMethod.POST,  produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/restApi/addMqttMsg", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> addMqttMsg(@RequestBody MessageDTO messageDTO) throws Exception {
+		//System.out.println(RestApiConstants.myFunction());
+		System.out.println("in rest controller");
 		ResponseEntity<?> responseEntity = null;
 		KafkaProducer.publishMesssage(messageDTO);
-		KafkaConsumer.consumeMessage(messageDTO.getTopic());
+		//KafkaConsumer.consumeMessage(messageDTO.getTopic());
 		responseEntity = new ResponseEntity<>("successfully published and consumed msg", HttpStatus.OK);
 		return responseEntity;
 	}
-	
-	
-	@RequestMapping(value = "/getMqttMsg", method = RequestMethod.GET,  produces = MediaType.APPLICATION_JSON_VALUE)
+
+	@RequestMapping(value = "/getMqttMsg", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getMqttMsg() {
 		ResponseEntity<?> responseEntity = null;
-		
+
 		responseEntity = new ResponseEntity<>("success msg", HttpStatus.OK);
 		return responseEntity;
 	}

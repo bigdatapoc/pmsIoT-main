@@ -1,34 +1,37 @@
 package com.hcl.pmsiot.mqtt.connector;
 
 import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
+
+import com.hcl.pmsiot.mqtt.constants.Constants;
 
 public class Subscriber {
 
- /* public static void main(String[] args) throws MqttException {
-	String mqttClientUrl = "tcp://192.168.1.13:1883";
-	String topic = "iot_data";
-    System.out.println("== START SUBSCRIBER ==");
+	public static void main(String[] args) throws MqttException {
 
-    MqttClient client=new MqttClient(mqttClientUrl, MqttClient.generateClientId());
-    client.setCallback( new SimpleMqttCallBack() );
-    client.connect();
+		System.out.println("== SUBSCRIBER STARTED ==");
+		int qos = 2;
+		String mqttClientUrl = Constants.MQTT_Client_URL;
+		String topic = Constants.Topic_MQTT;
 
-    client.subscribe(topic);
+		//MqttConnectOptions conOpt = new MqttConnectOptions();
+		//conOpt.setCleanSession(true);
+		MqttClient client = new MqttClient(mqttClientUrl, MqttClient.generateClientId());
+		client.connect();
+		client.setCallback(new SimpleMqttCallBack());
+		client.subscribe(topic);
+		//client.connect(conOpt);
+		//client.unsubscribe(topic);
+		
+		//System.out.println("Reading ........ Please enter to exit!!!!");
+		/*try {
+			System.in.read();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		client.disconnect();*/
 
-  }*/
-  
-  public static void main() throws MqttException {
-		String mqttClientUrl = "tcp://192.168.1.13:1883";
-		String topic = "iot_data";
-	    System.out.println("== START SUBSCRIBER ==");
-
-	    MqttClient client=new MqttClient(mqttClientUrl, MqttClient.generateClientId());
-	    client.setCallback( new SimpleMqttCallBack() );
-	    client.connect();
-
-	    client.subscribe(topic);
-
-	  }
-
+	}
 }

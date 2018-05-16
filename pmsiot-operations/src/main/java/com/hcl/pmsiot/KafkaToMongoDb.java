@@ -1,5 +1,6 @@
 package com.hcl.pmsiot;
 
+import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,11 +16,8 @@ import org.apache.spark.streaming.api.java.JavaPairInputDStream;
 import org.apache.spark.streaming.api.java.JavaStreamingContext;
 import org.apache.spark.streaming.kafka.KafkaUtils;
 
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
-import com.mongodb.Mongo;
-import com.mongodb.util.JSON;
+import com.hcl.pmsiot.data.UserLocation;
+import com.hcl.pmsiot.mongo.MongoDao;
 
 import kafka.serializer.StringDecoder;
 import scala.Tuple2;
@@ -36,13 +34,11 @@ import scala.Tuple2;
 public final class KafkaToMongoDb {
 
 	public static String brokerHost = "localhost:9092";
-	public static String topics = "test";
-	public static String mongoHost = "192.168.2.68";
-	public static int mongoPort = 27017;
+	public static String topics = "iot_data";
+	
+	public static void main(String[] args) throws UnknownHostException {
 
-	public static void main(String[] args) {
-
-		SparkConf sparkConf = new SparkConf().setAppName("JavaDirectKafkaWordCount").setMaster("local[2]")
+		SparkConf sparkConf = new SparkConf().setAppName("JavaDirectKafkaWordCount").setMaster("local[10]")
 				.set("spark.executor.memory", "1g");
 
 		// Create context with a 2 seconds batch interval
@@ -63,27 +59,23 @@ public final class KafkaToMongoDb {
 			}
 
 		});
-
+		MongoDao dao = new MongoDao();
 		data.foreachRDD(new VoidFunction<JavaRDD<String>>() {
 			@Override
 			public void call(JavaRDD<String> data) throws Exception {
-				Mongo mongo = new Mongo(mongoHost, mongoPort);
-				DB db = mongo.getDB("pmsdb");
-
-				DBCollection collection = db.getCollection("TestCollection");
+				
+				
+				
 				if (data != null) {
 					List<String> result = data.collect();
 
-					for (String latLongs : result) {
+					for (String userDetail : result) {
 
-						System.out.println(latLongs);
+						System.out.println(userDetail);
 
-						String[] latLongArray = latLongs.split(",");
-
-						DBObject dbObject = (DBObject) JSON.parse(
-								"{'latitute':'" + latLongArray[0] + " ', 'longitude':'" + latLongArray[1] + "'}");
-
-						collection.insert(dbObject);
+						String[] str = userDetail.split(",");
+						UserLocation userLocation = new UserLocation(str[0], str[1], str[2]);
+						dao.saveorUpdateUserLocation(userLocation);
 						System.out.println("Inserted Data Done");
 					}
 				}
