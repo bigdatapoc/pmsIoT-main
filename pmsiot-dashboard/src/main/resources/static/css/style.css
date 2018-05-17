@@ -259,7 +259,7 @@ a:hover {
 }
 .logo-name {
     float: left;
-    width: 30%;
+    width: 600px;
     margin: 0% 3% 0% 2%;
 }
 .logo-name h1 {
@@ -778,7 +778,7 @@ ul.dropdown-menu {
     position: absolute;
     top: 34%;
     right: 8%;
-    color: #68AE00;
+    color: #ffff;
     font-size: 1.6em;
 }
 .profile_details ul li ul.dropdown-menu.drp-mnu {
@@ -1256,7 +1256,7 @@ span.malorum-pro {
     box-shadow: none;
 }
 .chit-chat-layer1 {
-    margin:2em  0em;
+   margin-top:18px !important;
 }
 .chit-chat-heading {
     font-size: 1.2em;
@@ -1287,7 +1287,7 @@ section#charts1 {
 div#geoChart {
     width: 100% !important;
     height: 305px!important;
-    border: 4px solid #fff;
+    border: 8px solid #fff;
 }
 h3#geoChartTitle {
     font-size: 1.3em;
@@ -4053,6 +4053,7 @@ canvas#bar {
 }
 .chit-chat-layer1 {
     margin: 1em 0em;
+    background:#fff;
 }
 .chit-chat-layer1-left {
     padding: 0em 0em 1em 0em;
