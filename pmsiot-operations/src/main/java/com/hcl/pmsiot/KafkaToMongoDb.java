@@ -72,7 +72,7 @@ public final class KafkaToMongoDb {
 					for (String userDetail : result) {
 
 						System.out.println(userDetail);
-
+						userDetail = userDetail.substring(1, userDetail.length() - 1);
 						String[] str = userDetail.split(",");
 						UserLocation userLocation = new UserLocation(str[0], str[1], str[2]);
 						dao.saveorUpdateUserLocation(userLocation);
