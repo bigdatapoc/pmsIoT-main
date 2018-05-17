@@ -23,6 +23,7 @@
 		<module>pmsiot-sink</module>
 		<module>pmsiot-operations</module>
 		<module>pmsiot-eureka-server</module>
+		<module>pmsiot-dashboard</module>
 	</modules>
 
 	<properties>
