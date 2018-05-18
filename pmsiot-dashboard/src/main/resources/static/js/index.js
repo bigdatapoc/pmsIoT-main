@@ -1,22 +1,20 @@
 $(document).ready(function(){
 	
-	//alert("In SUCCESSxxsxsdxs ");
+	//This method get call initially 
 	showallemployee();
 	
+	//button click event to find employee using sap id
 	$('#btnSearch').click(function(){
-    	//alert("In Search ");
-		
+    	
 		var search = $('#pac-input').val();
-		//alert(search);
-		
+				
 		$.ajax({
         	type:"GET",
             url:"/byid/"+search,
             success:function(data, textStatus, jqXHR){
-          // 	alert(data.latitude);
             if(data!="")
             	{
-            	  mymap(data.latitude,data.longitude,data.userId);
+            	showById(data.latitude,data.longitude,data.userId);
             	}
             else{
             	  alert("NO RECORD FOUND");
@@ -31,8 +29,8 @@ $(document).ready(function(){
 	});
 	
 
-	
-	function mymap(){
+	//function to create map and show employee on map
+	function showById(){
 		
 		  //alert("mymap");
 		  var latitude  = arguments[0];
@@ -64,9 +62,10 @@ $(document).ready(function(){
 		 
 	}
 	
-	function mymapallemp(){
+	
+	//function to create map and show  all employee's on map
+	function showAllEmployeeMap(){
 		
-		 //alert("fun");
 		    var locations = arguments[0];
 		    var latitude  = 28.53590728969859;
 			var longitude = 77.3436963558197;
@@ -76,14 +75,7 @@ $(document).ready(function(){
 		      center: new google.maps.LatLng(latitude,longitude),
 		    });
 
-		 // Create the search box and link it to the UI element.
-	      /*  var input = document.getElementById('pac-input');
-	        var button = document.getElementById('btnSearch');
-	       // var searchBox = new google.maps.places.SearchBox(input);
-	        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-	        map.controls[google.maps.ControlPosition.TOP_LEFT].push(button);
-*/
-		    
+		 	    
 		    var infowindow = new google.maps.InfoWindow();
 		    var marker, i;
 		    for (i = 0; i < locations.length; i++) { 
@@ -107,14 +99,14 @@ $(document).ready(function(){
 		  
 	}
 	
+	//Function to show all employees on map
     function showallemployee(){
 		
-		//alert("fun");
     	$.ajax({
         	type:"GET",
             url:"/allemployee",
             success:function(data, textStatus, jqXHR){
-            mymapallemp(data);
+            showAllEmployeeMap(data);
            			             
             },
 	         error:function( jqXhr, textStatus, errorThrown ) {           
@@ -124,11 +116,7 @@ $(document).ready(function(){
         });
 		  
 	}
-	
-	
-	
-	
-	
+		
 });
 		        
 

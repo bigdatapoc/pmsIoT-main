@@ -2,6 +2,7 @@ package com.hcl.pmsiot.dashboard.Model;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+//Entity class to map object of Mongodb 
 @Document(collection = "UserLocation")
 public class UserLocation {
 	

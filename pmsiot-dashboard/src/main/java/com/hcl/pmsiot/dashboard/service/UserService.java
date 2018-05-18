@@ -3,11 +3,9 @@ package com.hcl.pmsiot.dashboard.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
+import com.hcl.pmsiot.dashboard.Dao.UserLocationDao;
 import com.hcl.pmsiot.dashboard.Model.UserLocation;
 
 
@@ -15,20 +13,20 @@ import com.hcl.pmsiot.dashboard.Model.UserLocation;
 public class UserService {
 	
 	    @Autowired
-		private MongoTemplate mongotemplate;
+		private UserLocationDao userLocationDao;
 		
-		//@Autowired
-		//private MongoCrudRepository crudRepository;
 		
+		//service methode to provide list of employee using Mongotemplete
 		public List<UserLocation> getAllEmployeeService() {
 			
-			return mongotemplate.findAll(UserLocation.class);
+			return userLocationDao.getAllEmployeeDao();
 			
 		}
 		
+		//service methode to provide employee object using Mongotemplete
 		public UserLocation getEmployeeByIdService(String userId) {
 			
-			return mongotemplate.findOne(new Query(Criteria.where("userId").is(userId)), UserLocation.class,"UserLocation");
+			return userLocationDao.getEmployeeByIdDao(userId);
 			
 		}
 		

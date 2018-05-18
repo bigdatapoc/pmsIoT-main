@@ -18,7 +18,7 @@ public class PmsiotHclDashboardApplication {
 		SpringApplication.run(PmsiotHclDashboardApplication.class, args);
 	}
 	
-	
+	//creteded  mongo client to connect mongodb
 	@Bean
     public MongoDbFactory mongoDbFactory() throws Exception {
 
@@ -27,7 +27,7 @@ public class PmsiotHclDashboardApplication {
         return new SimpleMongoDbFactory(mongoClient, "campus");
     }
 
-
+	//creteded Mongo Templete using Mongo client  to connect mongodb
     @Bean
     public MongoTemplate mongoTemplate() throws Exception {
         MongoTemplate mongoTemplate = new MongoTemplate(mongoDbFactory());
