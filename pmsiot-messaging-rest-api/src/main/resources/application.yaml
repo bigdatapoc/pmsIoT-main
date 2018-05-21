@@ -1,6 +1,4 @@
 server:
     address: localhost
     port: 12345
-    contextPath: /pmsiotMessagingRestApi
-    
-       
+         

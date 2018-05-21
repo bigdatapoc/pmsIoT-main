@@ -11,6 +11,9 @@ public class RestApiConstants {
 	// Kafka Constants
 	public static final String KafkaBrokerUri = "localhost:9092";
 	public static final String SerializerClass = "kafka.serializer.StringEncoder";
+	public static final String KafkaServerPort = "9092";
+	public static final String KafkaServerHost = "localhost";
+	
 
 	// Zookeeper Constants
 	public static final String ZookeeperUri = "localhost:2181";

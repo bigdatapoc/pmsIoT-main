@@ -33,7 +33,7 @@ import play.api.libs.json.Writes
 object SparkMain {
 
   def main(args: Array[String]): Unit = {
-    println("Hi")
+
     val sparkConfiguartion = new SparkConf().setAppName("Demo").setMaster("local[*]")
     val sparkContext = new SparkContext(sparkConfiguartion);
     val streamingContext = new StreamingContext(sparkContext, Seconds(10));
@@ -47,10 +47,6 @@ object SparkMain {
     props.put("value.serializer", Value_Serializer)
 
     Logger.getLogger("org").setLevel(Level.WARN)
-
-    println("start");
-
-    <!--new start-->
 
     println("======== Mongo Data ========")
     case class Building(Location: String, x_coordinate: Double, y_coordinate: Double)

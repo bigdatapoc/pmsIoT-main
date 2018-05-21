@@ -16,6 +16,7 @@ import org.apache.spark.streaming.api.java.JavaPairInputDStream;
 import org.apache.spark.streaming.api.java.JavaStreamingContext;
 import org.apache.spark.streaming.kafka.KafkaUtils;
 
+import com.hcl.pmsiot.Constants.OperationConstants;
 import com.hcl.pmsiot.data.UserLocation;
 import com.hcl.pmsiot.mongo.MongoDao;
 
@@ -33,9 +34,6 @@ import scala.Tuple2;
 
 public final class KafkaToMongoDb {
 
-	public static String brokerHost = "localhost:9092";
-	public static String topics = "iot_data";
-	
 	public static void main(String[] args) throws UnknownHostException {
 
 		SparkConf sparkConf = new SparkConf().setAppName("JavaDirectKafkaWordCount").setMaster("local[10]")
@@ -44,9 +42,9 @@ public final class KafkaToMongoDb {
 		// Create context with a 2 seconds batch interval
 		JavaStreamingContext jssc = new JavaStreamingContext(sparkConf, Durations.seconds(2));
 
-		HashSet<String> topicsSet = new HashSet<String>(Arrays.asList(topics.split(",")));
+		HashSet<String> topicsSet = new HashSet<String>(Arrays.asList(OperationConstants.KafkaTopic.split(",")));
 		HashMap<String, String> kafkaParams = new HashMap<String, String>();
-		kafkaParams.put("metadata.broker.list", brokerHost);
+		kafkaParams.put("metadata.broker.list", OperationConstants.KafkaBrokerHost);
 
 		// Create direct kafka stream with brokers and topics
 		JavaPairInputDStream<String, String> messages = KafkaUtils.createDirectStream(jssc, String.class, String.class,

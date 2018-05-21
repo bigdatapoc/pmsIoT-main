@@ -12,15 +12,12 @@ public class Subscriber {
 
 		System.out.println("== SUBSCRIBER STARTED ==");
 		int qos = 2;
-		String mqttClientUrl = Constants.MQTT_Client_URL;
-		String topic = Constants.Topic_MQTT;
-
 		//MqttConnectOptions conOpt = new MqttConnectOptions();
 		//conOpt.setCleanSession(true);
-		MqttClient client = new MqttClient(mqttClientUrl, MqttClient.generateClientId());
+		MqttClient client = new MqttClient(Constants.MqttClientUrl, MqttClient.generateClientId());
 		client.connect();
 		client.setCallback(new SimpleMqttCallBack());
-		client.subscribe(topic);
+		client.subscribe(Constants.MqttTopic);
 		//client.connect(conOpt);
 		//client.unsubscribe(topic);
 		

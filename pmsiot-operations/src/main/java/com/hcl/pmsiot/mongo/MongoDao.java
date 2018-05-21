@@ -2,6 +2,7 @@ package com.hcl.pmsiot.mongo;
 
 import java.net.UnknownHostException;
 
+import com.hcl.pmsiot.Constants.OperationConstants;
 import com.hcl.pmsiot.data.UserLocation;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
@@ -20,9 +21,8 @@ public class MongoDao {
 	
 	public MongoDao() throws UnknownHostException {
 		mongoclient = new MongoClient();
-		db = mongoclient.getDB("campus");
-		System.out.println("Connected");
-		System.out.println("Feching Records.....");
+		db = mongoclient.getDB(OperationConstants.MongoDocumentName);
+		
 	}
 /*	public static void main(String[] args) throws Exception {
 		System.out.println(ConnectDb.getMongoData());
@@ -32,9 +32,8 @@ public class MongoDao {
 	public DBCursor getBuildingData()
 	{
 		
-		DBCollection collection = db.getCollection("buildings");
+		DBCollection collection = db.getCollection(OperationConstants.MongoCollectionForBuildings);
 		DBCursor cursor = collection.find();
-		System.out.println("Completed");
 		return cursor;
 		//mongoclient.close();
 	}
@@ -52,7 +51,7 @@ public class MongoDao {
 	
 	public 	void saveUserLocation(UserLocation userLoc) {
 
-		DBCollection table = db.getCollection("UserLocation");
+		DBCollection table = db.getCollection(OperationConstants.MongoCollectionFoUsers);
 		BasicDBObject document = new BasicDBObject();
 		document.put("userId", userLoc.getUserId());
 		document.put("latitude", userLoc.getLatitude());
@@ -63,7 +62,7 @@ public class MongoDao {
 	
 	public  void updateUserLocation(UserLocation userLoc) {
 		
-		DBCollection table = db.getCollection("UserLocation");
+		DBCollection table = db.getCollection(OperationConstants.MongoCollectionFoUsers);
 		BasicDBObject query = new BasicDBObject();					
 		query.put("userId", userLoc.getUserId());
 
@@ -80,7 +79,7 @@ public class MongoDao {
 	
 	public UserLocation getUserLocation(String userId) {								
 		UserLocation userLocation= null;
-		DBCollection table = db.getCollection("UserLocation");
+		DBCollection table = db.getCollection(OperationConstants.MongoCollectionFoUsers);
 
 		BasicDBObject searchQuery = new BasicDBObject();
 		searchQuery.put("userId", userId);

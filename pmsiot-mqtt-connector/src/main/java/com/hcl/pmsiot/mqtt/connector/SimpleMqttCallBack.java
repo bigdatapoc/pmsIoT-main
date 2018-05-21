@@ -9,6 +9,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
+import com.hcl.pmsiot.mqtt.constants.Constants;
+
 public class SimpleMqttCallBack implements MqttCallback {
 
 	public void connectionLost(Throwable throwable) {
@@ -21,10 +23,10 @@ public class SimpleMqttCallBack implements MqttCallback {
 
 		MessageDTO messageDTO = new MessageDTO();
 		messageDTO.setMessage(new String(mqttMessage.getPayload()));
-		messageDTO.setTopic("iot_data");
+		messageDTO.setTopic(Constants.MqttTopic);
+		
 
 		// final String uri = "http://localhost:12345/mqttKafkaRestApp/addMqttMsg"; h1
-		final String uri = "http://localhost:12345/restApi/addMqttMsg";
 		RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
@@ -33,7 +35,7 @@ public class SimpleMqttCallBack implements MqttCallback {
 		restTemplate.getMessageConverters().add(new FormHttpMessageConverter());
 		String response = null;
 		try {
-			response = restTemplate.postForObject(uri, request, String.class);
+			response = restTemplate.postForObject(Constants.UrlRestApi, request, String.class);
 			System.out.println(response);
 		} catch (Exception e) {
 			System.out.println("Exception in Rest call ::: " + e.getMessage());

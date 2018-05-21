@@ -2,6 +2,7 @@ package com.hcl.pmsiot.mongo;
 
 import java.net.UnknownHostException;
 
+import com.hcl.pmsiot.Constants.MongoConstants;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
@@ -17,24 +18,20 @@ public class MongoDao {
 	
 	public MongoDao() throws UnknownHostException {
 		mongoclient = new MongoClient();
-		db = mongoclient.getDB("campus");
-		System.out.println("Connected");
-		System.out.println("Feching Records.....");
-	}
-/*	public static void main(String[] args) throws Exception {
-		System.out.println(ConnectDb.getMongoData());
-	}*/
-	
+		db = mongoclient.getDB(MongoConstants.MongoDocumentName);
+		}
+
 	@SuppressWarnings({ "resource", "deprecation" })
 	public DBCursor getBuildingData()
 	{
 		
-		DBCollection collection = db.getCollection("buildings");
+		DBCollection collection = db.getCollection(MongoConstants.MongoCollectionForBuildings);
 		DBCursor cursor = collection.find();
-		System.out.println("Completed");
 		return cursor;
 		//mongoclient.close();
 	}
 	
+	
+
 	
 }

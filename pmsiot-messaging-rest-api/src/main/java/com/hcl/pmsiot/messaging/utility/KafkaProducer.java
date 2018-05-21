@@ -24,12 +24,7 @@ public class KafkaProducer {
      }
      public static void publishMesssage(MessageDTO messageDTO) throws Exception{ 
     	 initialize();
-         //Define topic name and message
-    	// System.out.println(RestApiConstants.myFunction());
          KeyedMessage<Integer, String> keyedMsg = new KeyedMessage<Integer, String>(messageDTO.getTopic(), messageDTO.getMessage());
-         //ProducerRecord producerRecord =  new ProducerRecord<String, String>("HelloKafkaTopic", msg);
-         //producer.send(producerRecord);
-         System.out.println("him");
          System.out.println(keyedMsg);
          producer.send(keyedMsg); // This publishes message on given topic
         
