@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 
 import com.mongodb.MongoClient;
 
+
 @Configuration
 @SpringBootApplication
 public class PmsiotHclDashboardApplication {
@@ -22,7 +23,7 @@ public class PmsiotHclDashboardApplication {
 	@Bean
     public MongoDbFactory mongoDbFactory() throws Exception {
 
-        MongoClient mongoClient = new MongoClient("192.168.1.54", 27017);
+        MongoClient mongoClient = new MongoClient("192.168.99.100", 27017);
         //UserCredentials userCredentials = new UserCredentials("", "");
         return new SimpleMongoDbFactory(mongoClient, "campus");
     }

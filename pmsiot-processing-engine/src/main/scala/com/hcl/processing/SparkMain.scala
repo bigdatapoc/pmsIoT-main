@@ -35,6 +35,7 @@ object SparkMain {
   def main(args: Array[String]): Unit = {
 
     val sparkConfiguartion = new SparkConf().setAppName("Demo").setMaster("local[*]")
+    sparkConfiguartion.set("spark.testing.memory", "2147480000");
     val sparkContext = new SparkContext(sparkConfiguartion);
     val streamingContext = new StreamingContext(sparkContext, Seconds(10));
     val message = KafkaUtils.createStream(streamingContext, Kafka_Zookeeper_URL, Kafka_App_Name, Map(Kafka_Topic -> 1));

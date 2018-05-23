@@ -12,8 +12,8 @@ public class Publisher {
 	@SuppressWarnings("resource")
 	public static void main(String[] args) throws MqttException {
 
-		String mqttClientUrl = Constants.MQTT_Client_URL;
-		String topicName = Constants.Topic_MQTT;
+		String mqttClientUrl = Constants.MqttClientUrl;
+		String topicName = Constants.MqttTopic;
 		MqttClient client = new MqttClient(mqttClientUrl, MqttClient.generateClientId());
 		client.setCallback(new SimpleMqttCallBack()); // SETTING CALLBACK => Will Work After This Function Is Done.
 		client.connect(); // CONNECTING TO TARGET

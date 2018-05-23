@@ -38,7 +38,7 @@ public final class KafkaToMongoDb {
 
 		SparkConf sparkConf = new SparkConf().setAppName("JavaDirectKafkaWordCount").setMaster("local[10]")
 				.set("spark.executor.memory", "1g");
-
+		sparkConf.set("spark.testing.memory", "471859200");
 		// Create context with a 2 seconds batch interval
 		JavaStreamingContext jssc = new JavaStreamingContext(sparkConf, Durations.seconds(2));
 

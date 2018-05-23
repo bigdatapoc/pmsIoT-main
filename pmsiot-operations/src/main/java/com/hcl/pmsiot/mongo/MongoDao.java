@@ -20,7 +20,7 @@ public class MongoDao {
 	private DB db;
 	
 	public MongoDao() throws UnknownHostException {
-		mongoclient = new MongoClient();
+		mongoclient = new MongoClient("192.168.99.100", 27017);
 		db = mongoclient.getDB(OperationConstants.MongoDocumentName);
 		
 	}

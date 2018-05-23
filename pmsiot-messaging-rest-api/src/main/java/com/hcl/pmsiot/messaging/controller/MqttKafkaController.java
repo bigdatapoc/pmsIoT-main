@@ -18,7 +18,7 @@ public class MqttKafkaController {
 	@RequestMapping(value = "/restApi/addMqttMsg", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> addMqttMsg(@RequestBody MessageDTO messageDTO) throws Exception {
 		//System.out.println(RestApiConstants.myFunction());
-		System.out.println("in rest controller");
+		//System.out.println("in rest controller");
 		ResponseEntity<?> responseEntity = null;
 		KafkaProducer.publishMesssage(messageDTO);
 		//KafkaConsumer.consumeMessage(messageDTO.getTopic());
