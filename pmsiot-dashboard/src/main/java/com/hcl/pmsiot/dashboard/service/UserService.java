@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hcl.pmsiot.dashboard.Dao.UserLocationDao;
+import com.hcl.pmsiot.dashboard.Model.BuildingBoundary;
 import com.hcl.pmsiot.dashboard.Model.UserLocation;
 
 
@@ -30,5 +31,11 @@ public class UserService {
 			
 		}
 		
+		public List<BuildingBoundary> getBuildingsService() {
+					
+			return userLocationDao.getBuildingsDao();
+					
+		}
+				
 
 }

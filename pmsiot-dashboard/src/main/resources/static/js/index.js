@@ -1,7 +1,7 @@
 $(document).ready(function(){
 	
 	//This method get call initially 
-	showallemployee();
+	//showallemployee();
 	
 	//button click event to find employee using sap id
 	$('#btnSearch').click(function(){

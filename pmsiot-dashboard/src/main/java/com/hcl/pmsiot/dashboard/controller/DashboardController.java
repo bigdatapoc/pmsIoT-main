@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hcl.pmsiot.dashboard.Model.BuildingBoundary;
 import com.hcl.pmsiot.dashboard.Model.UserLocation;
 import com.hcl.pmsiot.dashboard.service.UserService;
 
@@ -43,6 +44,14 @@ public class DashboardController {
 		
 		UserLocation userlocation = userLocationService.getEmployeeByIdService(userId);
 		return  new ResponseEntity<>(userlocation, HttpStatus.OK);
+	
+	}
+	
+	@RequestMapping(value = "/allbuildings", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<BuildingBoundary>> getAlluilding() {
+		
+		List<BuildingBoundary> buildingsList = userLocationService.getBuildingsService();
+		return new ResponseEntity<>(buildingsList, HttpStatus.OK);
 	
 	}
 }

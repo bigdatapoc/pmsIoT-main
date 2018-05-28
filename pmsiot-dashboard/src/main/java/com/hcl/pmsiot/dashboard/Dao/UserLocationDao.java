@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
+import com.hcl.pmsiot.dashboard.Model.BuildingBoundary;
 import com.hcl.pmsiot.dashboard.Model.UserLocation;
 
 @Service
@@ -27,6 +28,12 @@ public class UserLocationDao {
         public UserLocation getEmployeeByIdDao(String userId) {
 			
 			return mongotemplate.findOne(new Query(Criteria.where("userId").is(userId)), UserLocation.class,"UserLocation");
+			
+		}
+        
+        public List<BuildingBoundary> getBuildingsDao() {
+			
+			return mongotemplate.findAll(BuildingBoundary.class);
 			
 		}
 }
