@@ -1,0 +1,22 @@
+<div [@routerTransition]>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-4 input-group">
+                <input id="btn-input" type="text" class="form-control input-sm" placeholder="Enter SAP Id">
+                <span class="input-group-btn">
+                    <button class="btn  btn-primary">
+                        Search
+                    </button>
+                </span>
+            </div>
+        </div>
+    </div>
+    <br/><br/>
+    <div class="row">
+        <div class="col-md-12">
+            <agm-map [latitude]="lat" [longitude]="lng">
+                <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
+            </agm-map>
+        </div>
+    </div>
+</div>
