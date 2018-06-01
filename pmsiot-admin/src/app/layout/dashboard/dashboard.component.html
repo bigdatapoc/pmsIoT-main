@@ -14,8 +14,15 @@
     <br/><br/>
     <div class="row">
         <div class="col-md-12">
-            <agm-map [latitude]="lat" [longitude]="lng">
-                <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
+            <agm-map [latitude]="center.lat" [longitude]="center.lng" [zoom]="center.zoom">
+                <agm-polygon *ngFor="let polygon of boundaries; let i = index;" 
+                                [paths]="polygon"
+                                [strokeColor]="'#1E90FF'"
+                                [fillColor]="'#87CEEB'"
+                                [clickable]="true">             
+                </agm-polygon>
+                
+                <agm-marker *ngFor="let m of markers; let ind = index;" [latitude]="m.latitude" [longitude]="m.longitude" [iconUrl]="markerUrl"><agm-info-window>SAP ID: {{m.userId}}</agm-info-window></agm-marker>
             </agm-map>
         </div>
     </div>
