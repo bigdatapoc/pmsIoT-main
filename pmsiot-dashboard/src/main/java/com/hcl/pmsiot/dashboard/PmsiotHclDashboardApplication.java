@@ -2,13 +2,7 @@ package com.hcl.pmsiot.dashboard;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.mongodb.MongoDbFactory;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
-
-import com.mongodb.MongoClient;
 
 
 @Configuration
@@ -20,7 +14,7 @@ public class PmsiotHclDashboardApplication {
 	}
 	
 	//creteded  mongo client to connect mongodb
-	@Bean
+	/*@Bean
     public MongoDbFactory mongoDbFactory() throws Exception {
 
         MongoClient mongoClient = new MongoClient("192.168.99.100",27017);
@@ -33,5 +27,5 @@ public class PmsiotHclDashboardApplication {
     public MongoTemplate mongoTemplate() throws Exception {
         MongoTemplate mongoTemplate = new MongoTemplate(mongoDbFactory());
         return mongoTemplate;
-    }
+    }*/
 }
