@@ -1,28 +1,48 @@
 <div [@routerTransition]>
     <div class="row">
         <div class="col-md-12">
-            <div class="col-md-4 input-group">
-                <input id="btn-input" type="text" class="form-control input-sm" placeholder="Enter SAP Id">
-                <span class="input-group-btn">
-                    <button class="btn  btn-primary">
-                        Search
-                    </button>
-                </span>
-            </div>
+            <form id="searchForm" name="searchForm" (ngSubmit)="searchUser()" #searchForm="ngForm">
+                <div class="col-md-4 input-group">
+                    
+                    <input id="btn-input" type="text" required name="searchKey" [(ngModel)]="searchKey" class="form-control input-sm" placeholder="Enter SAP Id">
+                    <span class="input-group-btn">
+                        <button class="btn  btn-primary" type="submit"> 
+                            Search
+                        </button>
+                        <button (click)="getAllUsers()" class="btn btn-primary" type="button"> 
+                            Reset
+                        </button>
+                    </span>
+                
+                </div>
+            </form>
         </div>
     </div>
     <br/><br/>
     <div class="row">
         <div class="col-md-12">
-            <agm-map [latitude]="center.lat" [longitude]="center.lng" [zoom]="center.zoom">
+            <agm-map [latitude]="defaultOptions.lat" 
+                     [longitude]="defaultOptions.lng" 
+                     [zoom]="defaultOptions.zoom"
+                     (mapReady)="userMapReady($event)">
                 <agm-polygon *ngFor="let polygon of boundaries; let i = index;" 
-                                [paths]="polygon"
+                                [paths]="polygon.points"
                                 [strokeColor]="'#1E90FF'"
                                 [fillColor]="'#87CEEB'"
-                                [clickable]="true">             
+                                [clickable]="true"
+                                (polyClick)="polygonClicked($event)">   
+
+                    <agm-snazzy-info-window [latitude]="defaultOptions.polygonLat" 
+                                     [longitude]="defaultOptions.polygonLng" 
+                                     [isOpen]="defaultOptions.isPolygonOpen"
+                                     (afterClose)="updateState()"> 
+                                    <ng-template>
+                                        <strong>{{polygon.title}}</strong><br>
+                                        <strong>Capacity: </strong>{{polygon.capacity}}
+                                    </ng-template></agm-snazzy-info-window>                  
                 </agm-polygon>
                 
-                <agm-marker *ngFor="let m of markers; let ind = index;" [latitude]="m.latitude" [longitude]="m.longitude" [iconUrl]="markerUrl"><agm-info-window>SAP ID: {{m.userId}}</agm-info-window></agm-marker>
+                <agm-marker *ngFor="let m of markers; let ind = index;" [latitude]="m.latitude" [longitude]="m.longitude" [iconUrl]="m.online == true ? markerUrl: markerUrlOffline"><agm-info-window>SAP ID: {{m.userId}}</agm-info-window></agm-marker>
             </agm-map>
         </div>
     </div>

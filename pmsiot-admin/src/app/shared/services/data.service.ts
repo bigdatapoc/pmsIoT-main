@@ -34,6 +34,17 @@ export class DataService {
                         );
     }
 
+    /**
+     * method to get all users location data from REST Api
+     */
+    getUserById(sapId): Observable<any>{
+
+        return this.http.get( this.domain + '/userDetails')
+                        .pipe(
+                            catchError((error: any) => Observable.throw(error.json().error || 'server error'))
+                        );
+    }
+
 
 
 }

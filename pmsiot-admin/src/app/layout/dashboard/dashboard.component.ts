@@ -13,13 +13,19 @@ declare var google: any;
 })
 export class DashboardComponent implements OnInit {
     
-    center = {
+    defaultOptions = {
         lat: 28.53590728969859,
         lng: 77.3436963558197,
-        zoom: 17
+        zoom: 17,
+        polygonLat: 0,
+        polygonLng: 0,
+        isPolygonOpen: false
     };
     
+    searchKey = null;
+    userMap;
     markerUrl: string = 'assets/images/marker-person.png';
+    markerUrlOffline: string = 'assets/images/marker-person.png';
     markers = [];
     boundaries = [];
 
@@ -35,10 +41,12 @@ export class DashboardComponent implements OnInit {
      * get all user locations
      */
     getAllUsers() {
+        this.searchKey = '';
         this.dataService.getAllUsers()
                             .subscribe((response) => {
                                 if (response.status == 'Success') {
                                     this.markers = response.data;
+                                    this.userMap.fitBounds(this.findStoresBounds());
                                 }
                             });
     }
@@ -52,11 +60,7 @@ export class DashboardComponent implements OnInit {
         this.dataService.getGeoFenceLocations()
                     .subscribe((response) => {
                         if (response.status == 'Success') {
-                            response.data.forEach(element => {
-                                this.boundaries.push(element.boudary)
-                            });
-
-                            this.loadBoundaries();
+                            this.loadBoundaries(response.data);
                         }
                     });
     }
@@ -64,17 +68,79 @@ export class DashboardComponent implements OnInit {
     /**
      * load geofence in map
      */
-    loadBoundaries() {
+    loadBoundaries(data) {
         this.loader.load().then(() => {
-            this.boundaries.forEach((arr) => {
+
+            let boundaries = [];
+
+            for (var i = 0; i < data.length; i++) {
+
+                let arr = data[i].boundary;
+                boundaries[i] = { points: [], title: data[i].name, capacity: data[i].capacity };
+                
                 arr.forEach((element, index) => {
-                    arr[index]['lat'] = element.latitude;
-                    arr[index]['lng'] = element.longitude;
-                    delete arr[index]['latitude'];
-                    delete arr[index]['longitude'];
+                    let posData = { lat: element.latitude, lng: element.longitude };
+                    boundaries[i]['points'].push(posData);
                 });
-            });
+
+            }
+
+            this.boundaries = boundaries;
+            
         });
+
+    }
+
+    /**
+     * Adjust popup position on polygon clicked
+     * @param event 
+     * @param polygon 
+     */
+    polygonClicked(event, polygon) {
+        this.defaultOptions.polygonLat = Number(event.latLng.lat());
+        this.defaultOptions.polygonLng = Number(event.latLng.lng());
+        this.defaultOptions.isPolygonOpen = true;
+    }
+
+    /**
+     * Update status of isOpen object
+     */
+    updateState() {
+        this.defaultOptions.isPolygonOpen = false;
+    }
+
+    /**
+     * Search user based on SAP ID
+     */
+    searchUser(map) {
+
+        if (this.searchKey == '') {
+            alert('Please enter SAP ID');
+        } else {
+            this.dataService.getUserById(this.searchKey)
+                                    .subscribe((response) => {
+                                        if (response.status == 'Success') {
+                                            this.markers = [];
+                                            this.markers.push(response.data);
+                                            
+                                            this.userMap.fitBounds(this.findStoresBounds());
+                                            this.defaultOptions.zoom = 16.9;
+                                        }
+                                    });
+        }
+    }
+
+    public userMapReady(map){
+        this.userMap = map;
+    }
+    
+    public findStoresBounds(){
+        let bounds:LatLngBounds = new google.maps.LatLngBounds();
+        for(let marker of this.markers){
+          bounds.extend(new google.maps.LatLng(marker.latitude, marker.longitude));
+        }
+        
+        return bounds;
     }
     
 
