@@ -1,3 +1,5 @@
 export const environment = {
-  production: true
+  production: true,
+
+  apiPath: 'http://localhost:3000'
 };
