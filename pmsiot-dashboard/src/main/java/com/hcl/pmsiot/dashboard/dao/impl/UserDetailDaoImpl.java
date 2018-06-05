@@ -19,13 +19,15 @@ public class UserDetailDaoImpl implements UserDetailDao{
 
 	public List<UserDetail> getAllUsers() {
 
+		Query query = new Query();
+		query.fields().exclude("locationHistory");
 		return mongotemplate.findAll(UserDetail.class);
 
 	}
 
 	public UserDetail getUserById(String userId) {
 
-		return mongotemplate.findOne(new Query(Criteria.where("userId").is(userId)), UserDetail.class, "UserLocation");
+		return mongotemplate.findOne(new Query(Criteria.where("userId").is(userId)), UserDetail.class);
 
 	}
 

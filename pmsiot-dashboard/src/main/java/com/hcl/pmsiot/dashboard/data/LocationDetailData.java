@@ -2,11 +2,11 @@ package com.hcl.pmsiot.dashboard.data;
 
 public class LocationDetailData {
 
-	public LocationDetailData(String name, String capacity, BoundaryData[] boudary, double latitude, double longitude) {
+	public LocationDetailData(String name, String capacity, BoundaryData[] boundary, double latitude, double longitude) {
 		super();
 		this.name = name;
 		this.capacity = capacity;
-		this.boudary = boudary;
+		this.boundary = boundary;
 		this.latitude = latitude;
 		this.longitude = longitude;
 	}
@@ -15,7 +15,7 @@ public class LocationDetailData {
 
 	private String capacity;
 
-	private BoundaryData[] boudary;
+	private BoundaryData[] boundary;
 
 	private double latitude;
 
@@ -37,12 +37,12 @@ public class LocationDetailData {
 		this.capacity = capacity;
 	}
 
-	public BoundaryData[] getBoudary() {
-		return boudary;
+	public BoundaryData[] getBoundary() {
+		return boundary;
 	}
 
-	public void setBoudary(BoundaryData[] boudary) {
-		this.boudary = boudary;
+	public void setBoudary(BoundaryData[] boundary) {
+		this.boundary = boundary;
 	}
 
 	public double getLatitude() {

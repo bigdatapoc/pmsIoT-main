@@ -1,15 +1,23 @@
 package com.hcl.pmsiot.dashboard.data;
 
 import java.util.Date;
+import java.util.List;
 
 public class UserDetailData {
 
-	public UserDetailData(String userId, double latitude, double longitude, Date lastKnown) {
+	public UserDetailData() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public UserDetailData(String userId, double latitude, double longitude, Date lastKnown, boolean online,
+			List<UserLocationHistoryData> locationHistory) {
 		super();
 		this.userId = userId;
 		this.latitude = latitude;
 		this.longitude = longitude;
 		this.lastKnown = lastKnown;
+		this.online = online;
+		this.locationHistory = locationHistory;
 	}
 
 	private String userId;
@@ -20,6 +28,10 @@ public class UserDetailData {
 
 	private Date lastKnown;
 
+	private boolean online;
+	
+	private List<UserLocationHistoryData> locationHistory;
+	
 	public String getUserId() {
 		return userId;
 	}
@@ -52,6 +64,22 @@ public class UserDetailData {
 		this.lastKnown = lastKnown;
 	}
 
+	public boolean isOnline() {
+		return online;
+	}
+
+	public void setOnline(boolean online) {
+		this.online = online;
+	}
+
+	public List<UserLocationHistoryData> getLocationHistory() {
+		return locationHistory;
+	}
+
+	public void setLocationHistory(List<UserLocationHistoryData> locationHistory) {
+		this.locationHistory = locationHistory;
+	}
+	
 	public static UserDetailBuilder newBuilder() {
 		return new UserDetailBuilder();
 	}
@@ -66,8 +94,12 @@ public class UserDetailData {
 
 		private Date lastKnown;
 
+		private boolean online;
+		
+		private List<UserLocationHistoryData> locationHistory;
+		
 		public UserDetailData getUserDetailData() {
-			return new UserDetailData(this.userId, this.latitude, this.longitude, this.lastKnown);
+			return new UserDetailData(this.userId, this.latitude, this.longitude, this.lastKnown, this.online, this.locationHistory);
 		}
 
 		public UserDetailBuilder setUserId(String userId) {
@@ -87,6 +119,16 @@ public class UserDetailData {
 
 		public UserDetailBuilder setLastKnown(Date lastKnown) {
 			this.lastKnown = lastKnown;
+			return this;
+		}
+
+		public UserDetailBuilder setOnline(boolean online) {
+			this.online = online;
+			return this;
+		}
+
+		public UserDetailBuilder setLocationHistory(List<UserLocationHistoryData> locationHistory) {
+			this.locationHistory = locationHistory;
 			return this;
 		}
 

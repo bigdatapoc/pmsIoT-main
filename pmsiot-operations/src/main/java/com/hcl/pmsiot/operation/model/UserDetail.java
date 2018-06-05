@@ -1,4 +1,4 @@
-package com.hcl.pmsiot.dashboard.model;
+package com.hcl.pmsiot.operation.model;
 
 import java.util.Date;
 import java.util.List;

@@ -1,31 +1,31 @@
 version: '2'
 services:
  
-  mongodb:
-    image: mongo:latest
-    container_name: "mongodb"
-    environment:
-      - MONGO_DATA_DIR=/data/db
-      - MONGO_LOG_DIR=/dev/null
-    volumes:
-      - ./data/db:/data/db
-    ports:
-        - 27017:27017
-    command: mongod --smallfiles --logpath=/dev/null # --quiet
-    hostname : mongodb
+ # mongodb:
+ #   image: mongo:latest
+ #   container_name: "mongodb"
+ #   environment:
+ #     - MONGO_DATA_DIR=/data/db
+ #     - MONGO_LOG_DIR=/dev/null
+ #   volumes:
+ #     - ./data/db:/data/db
+ #   ports:
+ #       - 27017:27017
+ #   command: mongod --smallfiles --logpath=/dev/null # --quiet
+ #   hostname : mongodb
 
 #mqtt
-  mqtt:
-     image: eclipse-mosquitto:latest
-     restart: always
-     ports:
-       - "1883:1883"
-       - "9001:9001"
-     volumes:
-       - /opt/conf/mqtt/config:/mosquitto/config
-       - /opt/conf/mqtt/data:/mosquitto/data
-       - /opt/conf/mqtt/log:/mosquitto/log
-     hostname : iotmqtt  
+#  mqtt:
+#     image: eclipse-mosquitto:latest
+#     restart: always
+#     ports:
+#       - "1883:1883"
+#       - "9001:9001"
+#     volumes:
+#       - /opt/conf/mqtt/config:/mosquitto/config
+#       - /opt/conf/mqtt/data:/mosquitto/data
+#       - /opt/conf/mqtt/log:/mosquitto/log
+#     hostname : iotmqtt  
 
 
 #zookeper Kafka      
@@ -33,18 +33,18 @@ services:
     image: "wurstmeister/kafka:0.10.2.0"
     ports:
      - "9092:9092"
-    hostname: kafka
+    #hostname: kafka
     links: 
      - zookeeper
     environment:
      - KAFKA_ADVERTISED_HOST_NAME=192.168.99.100
-     - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+     - KAFKA_ZOOKEEPER_CONNECT=192.168.99.100:2181
      - KAFKA_ADVERTISED_PORT=9092
   zookeeper:
     image: wurstmeister/zookeeper
     ports:
       - "2181:2181"
-    hostname: zookeeper
+    #hostname: zookeeper
     
 #***********************************************# TOOLS & SERVICES#***********************************************#
 # Eureka service registry
@@ -58,8 +58,8 @@ services:
     build: pmsiot-dashboard
     ports:
     - "8074:8074"
-    links:
-    - mongodb
+#    links:
+#    - mongodb
 
 # processing-engine microservice From Kafka to Spark - intellegence
   processing-engine:
@@ -67,7 +67,7 @@ services:
     ports:
     - "8072:8072"
     links:
-    - mongodb
+#    - mongodb
     - kafka
     - zookeeper
 
@@ -79,10 +79,10 @@ services:
     - "8089:8089"
     - "12345:12345"    
     links:
-    - mongodb
+ #   - mongodb
     - kafka
     - zookeeper
-    - mqtt
+#    - mqtt
 
 # From Kafka to Spark -> MongoDB
   operations:
@@ -90,7 +90,7 @@ services:
     ports:
     - "8085:8085"
     links:
-    - mongodb
+ #   - mongodb
     - kafka
     - zookeeper
 
@@ -100,8 +100,8 @@ services:
     ports:
     - "8095:8095"
     - "8080:8080"  
-    links:
-    - mqtt
+#    links:
+#    - mqtt
 
 #******************************************# END OF MICROSERVICES #*********************************************#
 #################################################################################################################  
