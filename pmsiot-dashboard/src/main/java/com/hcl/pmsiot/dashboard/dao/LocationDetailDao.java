@@ -7,5 +7,7 @@ import com.hcl.pmsiot.dashboard.model.LocationDetail;
 public interface LocationDetailDao {
 
 	List<LocationDetail> getAllLocation();
+
+	LocationDetail getLocationByName(String name);
 	
 }
