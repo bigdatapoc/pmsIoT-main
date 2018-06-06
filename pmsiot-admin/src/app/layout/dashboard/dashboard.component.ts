@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { routerTransition } from '../../router.animations';
 import { DataService } from '../../shared/services/data.service';
 import { GoogleMapsAPIWrapper, MapsAPILoader, AgmMap, LatLngBounds, LatLngBoundsLiteral} from '@agm/core';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 declare var google: any;
 
@@ -13,6 +14,7 @@ declare var google: any;
 })
 export class DashboardComponent implements OnInit {
     
+    closeResult: string;
     defaultOptions = {
         lat: 28.53590728969859,
         lng: 77.3436963558197,
@@ -21,15 +23,23 @@ export class DashboardComponent implements OnInit {
         polygonLng: 0,
         isPolygonOpen: false
     };
+
+    messageObj = {
+        titleText: null,
+        messageText: null
+    };
     
     searchKey = null;
+    locationHistory = [];
     userMap;
     markerUrl: string = 'assets/images/marker-person.png';
     markerUrlOffline: string = 'assets/images/marker-person.png';
     markers = [];
     boundaries = [];
 
-    constructor(private dataService: DataService, private loader: MapsAPILoader) {
+    constructor(private dataService: DataService, 
+                    private loader: MapsAPILoader,
+                        private modalService: NgbModal) {
     }
 
     ngOnInit() {
@@ -42,6 +52,7 @@ export class DashboardComponent implements OnInit {
      */
     getAllUsers() {
         this.searchKey = '';
+        this.locationHistory = [];
         this.dataService.getAllUsers()
                             .subscribe((response) => {
                                 if (response.status == 'Success') {
@@ -122,7 +133,7 @@ export class DashboardComponent implements OnInit {
                                         if (response.status == 'Success') {
                                             this.markers = [];
                                             this.markers.push(response.data);
-                                            
+                                            this.locationHistory = response.data.locationHistory;
                                             this.userMap.fitBounds(this.findStoresBounds());
                                             this.defaultOptions.zoom = 16.9;
                                         }
@@ -130,10 +141,17 @@ export class DashboardComponent implements OnInit {
         }
     }
 
+    /**
+     * Initialize userMap Object
+     * @param map 
+     */
     public userMapReady(map){
         this.userMap = map;
     }
     
+    /**
+     * Adjust map bounds
+     */
     public findStoresBounds(){
         let bounds:LatLngBounds = new google.maps.LatLngBounds();
         for(let marker of this.markers){
@@ -141,6 +159,34 @@ export class DashboardComponent implements OnInit {
         }
         
         return bounds;
+    }
+
+    /**
+     * Open popup for message/notification
+     */
+    openMessageModal(content, titleText, type) {
+        if (type == 'boundary') {
+            this.messageObj.titleText = `Premises: ${titleText}`;
+        } else {
+            this.messageObj.titleText = `SAP ID: ${titleText}`;
+        }
+        
+        this.modalService.open(content).result.then((result) => {
+            this.closeResult = `Closed with: ${result}`;
+        }, (reason) => {
+            this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+        });
+    }
+
+    //TODO: Remove this method and dependencies
+    private getDismissReason(reason: any): string {
+        if (reason === ModalDismissReasons.ESC) {
+            return 'by pressing ESC';
+        } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+            return 'by clicking on a backdrop';
+        } else {
+            return  `with: ${reason}`;
+        }
     }
     
 

@@ -6,10 +6,10 @@
                     
                     <input id="btn-input" type="text" required name="searchKey" [(ngModel)]="searchKey" class="form-control input-sm" placeholder="Enter SAP Id">
                     <span class="input-group-btn">
-                        <button class="btn  btn-primary" type="submit"> 
+                        <button class="btn  btn-primary" id="searchButton" type="submit"> 
                             Search
                         </button>
-                        <button (click)="getAllUsers()" class="btn btn-primary" type="button"> 
+                        <button (click)="getAllUsers()" class="btn btn-secondary" type="button"> 
                             Reset
                         </button>
                     </span>
@@ -25,25 +25,76 @@
                      [longitude]="defaultOptions.lng" 
                      [zoom]="defaultOptions.zoom"
                      (mapReady)="userMapReady($event)">
-                <agm-polygon *ngFor="let polygon of boundaries; let i = index;" 
-                                [paths]="polygon.points"
-                                [strokeColor]="'#1E90FF'"
-                                [fillColor]="'#87CEEB'"
-                                [clickable]="true"
-                                (polyClick)="polygonClicked($event)">   
+                <ng-container *ngIf="locationHistory.length == 0">            
+                    <agm-polygon *ngFor="let polygon of boundaries; let i = index;" 
+                                    [paths]="polygon.points"
+                                    [strokeColor]="'#1E90FF'"
+                                    [fillColor]="'#87CEEB'"
+                                    [clickable]="true"
+                                    (polyClick)="polygonClicked($event)">   
 
-                    <agm-snazzy-info-window [latitude]="defaultOptions.polygonLat" 
-                                     [longitude]="defaultOptions.polygonLng" 
-                                     [isOpen]="defaultOptions.isPolygonOpen"
-                                     (afterClose)="updateState()"> 
-                                    <ng-template>
-                                        <strong>{{polygon.title}}</strong><br>
-                                        <strong>Capacity: </strong>{{polygon.capacity}}
-                                    </ng-template></agm-snazzy-info-window>                  
-                </agm-polygon>
+                        <agm-snazzy-info-window [latitude]="defaultOptions.polygonLat" 
+                                        [longitude]="defaultOptions.polygonLng" 
+                                        [isOpen]="defaultOptions.isPolygonOpen"
+                                        (afterClose)="updateState()"> 
+                                        <ng-template>
+                                            <div class="mapTooltip">
+                                                <p><strong>{{polygon.title}}</strong></p>
+                                                <p><strong>Capacity: </strong>{{polygon.capacity}}</p>
+                                                <div>
+                                                    <a class="notifyBtn pull-right" (click)="openMessageModal(content, polygon.title, 'boundary')"><i class="fa fa-bullhorn"></i></a>
+                                                </div>
+                                            </div>
+                                        </ng-template></agm-snazzy-info-window>                  
+                    </agm-polygon>
+                </ng-container>
                 
-                <agm-marker *ngFor="let m of markers; let ind = index;" [latitude]="m.latitude" [longitude]="m.longitude" [iconUrl]="m.online == true ? markerUrl: markerUrlOffline"><agm-info-window>SAP ID: {{m.userId}}</agm-info-window></agm-marker>
+                <ng-container *ngFor="let m of markers; let ind = index;">
+                    <agm-marker *ngIf="m.online == true" [latitude]="m.latitude" [longitude]="m.longitude" [iconUrl]="m.online == true ? markerUrl: markerUrlOffline">
+                        <agm-info-window>
+                            <div class="mapTooltip individual-tooltip">
+                                <p><strong>SAP ID:</strong> {{m.userId}}</p><br/>
+                                <div>
+                                    <a class="notifyBtn pull-left" (click)="openMessageModal(content, m.userId, 'individual')"><i class="fa fa-bullhorn"></i></a>
+                                </div>
+                            </div>
+                        </agm-info-window>
+                    </agm-marker>
+                </ng-container>
+
+                <ng-container *ngIf="locationHistory.length > 0">
+                    <agm-polyline [strokeColor]="'#1E90FF'" [geodesic]="'true'">
+                        <agm-polyline-point *ngFor="let data of locationHistory" 
+                            [latitude]="data.coordinate.latitude"
+                            [longitude]="data.coordinate.longitude">
+                        </agm-polyline-point>
+                    </agm-polyline>
+                </ng-container>
             </agm-map>
         </div>
     </div>
+
+    <ng-template #content let-c="close" let-d="dismiss">
+        <div class="modal-header">
+            <h4 class="modal-title">Send Notification</h4>
+            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-lg-12">
+                    <form role="form" id="messageForm" name="messageForm" (ngSubmit)="sendMessage()" #messageForm="ngForm">
+                        <fieldset class="form-group">
+                            <p>{{messageObj.titleText}}</p>
+                            <textarea [(ngModel)]="messageObj.messageText" name="messageText" required class="form-control" rows="3" maxlength="100"></textarea>
+                            <p class="pull-right"><small>Max characters allowed: 100</small></p>
+                        </fieldset>
+                        <button type="submit" class="btn btn-primary">Send</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+    </ng-template>
 </div>

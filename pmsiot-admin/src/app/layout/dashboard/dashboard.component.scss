@@ -2,3 +2,30 @@ agm-map {
     height: 450px;
 }
 
+#searchButton{
+    margin-right: 3px;
+}
+
+.btn, .form-control{
+    padding: 0.15rem 0.75rem;
+}
+
+.mapTooltip p{
+    margin-bottom: 0 !important;
+}
+
+.notifyBtn{
+    border: 2px solid #28a745;
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.notifyBtn i{
+    color: #28a745;
+}
+
+.individual-tooltip{
+    height: 60px;
+}
+

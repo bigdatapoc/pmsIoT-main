@@ -44,7 +44,7 @@
                 "latitude":28.535876,
                 "longitude":77.343901,
                 "lastKnown":1415954109000,
-                "online":false,
+                "online":true,
                 "locationHistory":null
             },
             {
@@ -52,7 +52,7 @@
                 "latitude":28.536831666666664,
                 "longitude":77.34293833333332,
                 "lastKnown":null,
-                "online":false,
+                "online":true,
                 "locationHistory":null
             },
             {
@@ -60,7 +60,7 @@
                 "latitude":28.535221,
                 "longitude":77.344636,
                 "lastKnown":null,
-                "online":false,
+                "online":true,
                 "locationHistory":null
             },
             {
@@ -68,7 +68,7 @@
                 "latitude":28.535221,
                 "longitude":77.344636,
                 "lastKnown":null,
-                "online":false,
+                "online":true,
                 "locationHistory":null
             },
             {
@@ -84,7 +84,7 @@
                 "latitude":28.536698333333334,
                 "longitude":77.3429,
                 "lastKnown":null,
-                "online":false,
+                "online":true,
                 "locationHistory":null
             },
             {
@@ -92,7 +92,7 @@
                 "latitude":28.536698333333334,
                 "longitude":77.3429,
                 "lastKnown":null,
-                "online":false,
+                "online":true,
                 "locationHistory":null
             },
             {
@@ -108,7 +108,7 @@
                 "latitude":28.536653333333334,
                 "longitude":77.3421,
                 "lastKnown":null,
-                "online":false,
+                "online":true,
                 "locationHistory":null
             }
         ],
@@ -122,12 +122,12 @@
             "latitude":28.53869,
             "longitude":77.341341,
             "lastKnown":1528110484025,
-            "online":false,
+            "online":true,
             "locationHistory":[
                 {
                     "coordinate":{
-                    "latitude":28.53869,
-                    "longitude":77.341341
+                    "latitude":28.535221,
+                    "longitude":77.344636
                     },
                     "timestamp":1528110411186
                 },
@@ -137,6 +137,13 @@
                     "longitude":77.341341
                     },
                     "timestamp":1528110484025
+                },
+                {
+                    "coordinate":{
+                    "latitude":28.536653333333334,
+                    "longitude":77.3421
+                    },
+                    "timestamp":1528110484026
                 }
             ]
         },
