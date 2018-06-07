@@ -36,6 +36,8 @@ export class DashboardComponent implements OnInit {
         messageText: null
     };
     
+    successMsg = '';
+    showSending = false;
     searchKey = null;
     locationHistory = [];
     userMap;
@@ -194,6 +196,8 @@ export class DashboardComponent implements OnInit {
      * Send notification message
      */
     sendMessage() {
+
+        this.showSending = true;
         this.dataService.sendNotification(this.messageObj)
                                     .subscribe((response) => {
                                         if (response.status == 'Success') {
@@ -203,9 +207,16 @@ export class DashboardComponent implements OnInit {
                                                 titleText: null,
                                                 messageText: null
                                             };
+
+                                            this.showSending = false;
+                                            this.successMsg = 'Notification sent successfully.';
+
+                                            setTimeout(() => {
+                                                this.successMsg = '';
+                                            }, 3000);
                                         }
                                     });
-        this.modalRef.close();
+        
     }
 
     /**
@@ -215,21 +226,23 @@ export class DashboardComponent implements OnInit {
      * @param index 
      */
     trackUser(content, userId, index) {
-        this._client = new Paho.MQTT.Client("host", 80, "path", "clientId");
+        this._client = new Paho.MQTT.Client("host", 80, "", "123");
     
         this._client.onConnectionLost = (responseObject: Object) => {
-        console.log('Connection lost.');
+            console.log('Connection lost.');
         };
         
         this._client.onMessageArrived = (message: Paho.MQTT.Message) => {
-        console.log('Message arrived.');
+            console.log('Message arrived.');
+            let msg = JSON.parse(message.payloadString);
+            this.markers[index].latitude = msg.data.latitude;
+            this.markers[index].latitude = msg.data.longitude;
         };
         
-        this._client.connect({ onSuccess: this.onConnected.bind(this) });
-    }
-
-    private onConnected():void {
-        console.log('Connected to broker.');
+        this._client.connect({ onSuccess: () => {
+            this._client.subscribe('user/'+ userId, {});   
+            this.isLiveTrackerOn = true;    
+        }});
     }
 
     /**
@@ -237,6 +250,7 @@ export class DashboardComponent implements OnInit {
      */
     stopTracking() {
         this._client.disconnect();
+        this.isLiveTrackerOn = false;    
     }
     
 

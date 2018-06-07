@@ -2,9 +2,9 @@
     <div class="row">
         <div class="col-md-12">
             <form id="searchForm" name="searchForm" (ngSubmit)="searchUser()" #searchForm="ngForm">
-                <div class="col-md-4 input-group">
+                <div class="col-md-4 input-group form-div">
                     
-                    <input id="btn-input" type="text" required name="searchKey" [(ngModel)]="searchKey" class="form-control input-sm" placeholder="Enter SAP Id">
+                    <input id="btn-input" type="text" required name="searchKey" [(ngModel)]="searchKey" class="form-control input-sm" placeholder="Enter SAP Id" autocomplete="off">
                     <span class="input-group-btn">
                         <button class="btn  btn-primary" id="searchButton" type="submit"> 
                             Search
@@ -16,6 +16,11 @@
                 
                 </div>
             </form>
+
+            <div class="tracker-div" *ngIf="isLiveTrackerOn == true">
+                <span><i class="fa fa-map-marker"></i>Tracking SAP ID: {{trackingId}}</span>  
+                <a class="trackerLink" (click)="stopTracking()">&nbsp;Stop</a>
+            </div>
         </div>
     </div>
     <br/><br/>
@@ -36,6 +41,7 @@
                         <agm-snazzy-info-window [latitude]="defaultOptions.polygonLat" 
                                         [longitude]="defaultOptions.polygonLng" 
                                         [isOpen]="defaultOptions.isPolygonOpen"
+                                        (beforeOpen)="getCurrentCount(polygon.id)"
                                         (afterClose)="updateState()"> 
                                         <ng-template>
                                             <div class="mapTooltip">
@@ -87,13 +93,19 @@
             <div class="row">
                 <div class="col-lg-12">
                     <form role="form" id="messageForm" name="messageForm" (ngSubmit)="sendMessage()" #messageForm="ngForm">
+                        <div class="successMsg"></div>
                         <fieldset class="form-group">
                             <p>{{messageObj.titleText}}</p>
-                            <input type="text" class="form-control" name="messageTitle" [(ngModel)]="messageObj.messageTitle" required maxlength="60" placeholder="Enter title here"/><br/>
+                            <input type="text" class="form-control" name="messageTitle" [(ngModel)]="messageObj.messageTitle" required maxlength="60" placeholder="Enter title here" autocomplete="off"/><br/>
                             <textarea [(ngModel)]="messageObj.messageText" name="messageText" required class="form-control" rows="3" maxlength="150" placeholder="Enter message here"></textarea>
                             <p class="pull-right"><small>Max characters allowed: 150</small></p>
                         </fieldset>
-                        <button type="submit" class="btn btn-primary">Send</button>
+                        <div class="spinner" *ngIf="showSending">
+                            <div class="bounce1"></div>
+                            <div class="bounce2"></div>
+                            <div class="bounce3"></div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" *ngIf="!showSending">Send</button>
                     </form>
                 </div>
             </div>

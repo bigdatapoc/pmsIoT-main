@@ -60,3 +60,34 @@ agm-map {
     height: 60px;
 }
 
+.form-div{
+    float: left;
+}
+
+.tracker-div{
+    float: right;
+    border: 2px solid #dc3545;
+    border-radius: 5px;
+    color: #dc3545;
+    padding: 4px;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.tracker-div i{
+    padding: 3px 6px 3px 6px;
+    border-radius: 50%;
+    border: 1px solid #dc3545;
+    margin-right: 3px;
+    animation: blinker 1s linear infinite;
+}
+
+.tracker-div a{
+    cursor: pointer;
+}
+
+@keyframes blinker {
+    50% {
+      opacity: 0;
+    }
+}
