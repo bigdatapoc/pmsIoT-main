@@ -40,12 +40,13 @@
                                         <ng-template>
                                             <div class="mapTooltip">
                                                 <p><strong>{{polygon.title}}</strong></p>
-                                                <p><strong>Capacity: </strong>{{polygon.capacity}}</p>
+                                                <p><strong>Total Capacity: </strong>{{polygon.capacity}}</p>
                                                 <div>
-                                                    <a class="notifyBtn pull-right" (click)="openMessageModal(content, polygon.title, 'boundary')"><i class="fa fa-bullhorn"></i></a>
+                                                    <a class="notifyBtn icoBtn pull-right" (click)="openMessageModal(content, polygon.title, 'boundary', polygon.id)"><i class="fa fa-bullhorn"></i></a>
                                                 </div>
                                             </div>
-                                        </ng-template></agm-snazzy-info-window>                  
+                                        </ng-template>
+                        </agm-snazzy-info-window>                  
                     </agm-polygon>
                 </ng-container>
                 
@@ -55,7 +56,8 @@
                             <div class="mapTooltip individual-tooltip">
                                 <p><strong>SAP ID:</strong> {{m.userId}}</p><br/>
                                 <div>
-                                    <a class="notifyBtn pull-left" (click)="openMessageModal(content, m.userId, 'individual')"><i class="fa fa-bullhorn"></i></a>
+                                    <a class="notifyBtn icoBtn" (click)="openMessageModal(content, m.userId, 'individual', m.userId)"><i class="fa fa-bullhorn"></i></a>
+                                    <a class="trackerBtn icoBtn" (click)="trackUser(content, m.userId, ind)"><i class="fa fa-map-marker"></i></a>
                                 </div>
                             </div>
                         </agm-info-window>
@@ -87,8 +89,9 @@
                     <form role="form" id="messageForm" name="messageForm" (ngSubmit)="sendMessage()" #messageForm="ngForm">
                         <fieldset class="form-group">
                             <p>{{messageObj.titleText}}</p>
-                            <textarea [(ngModel)]="messageObj.messageText" name="messageText" required class="form-control" rows="3" maxlength="100"></textarea>
-                            <p class="pull-right"><small>Max characters allowed: 100</small></p>
+                            <input type="text" class="form-control" name="messageTitle" [(ngModel)]="messageObj.messageTitle" required maxlength="60" placeholder="Enter title here"/><br/>
+                            <textarea [(ngModel)]="messageObj.messageText" name="messageText" required class="form-control" rows="3" maxlength="150" placeholder="Enter message here"></textarea>
+                            <p class="pull-right"><small>Max characters allowed: 150</small></p>
                         </fieldset>
                         <button type="submit" class="btn btn-primary">Send</button>
                     </form>

@@ -2,6 +2,7 @@
    "location":{
       "data":[
          {
+            "id": "1",
             "name":"Tower 6",
             "capacity":"100",
             "boundary":[
@@ -146,6 +147,14 @@
                     "timestamp":1528110484026
                 }
             ]
+        },
+        "status":"Success",
+        "message":null
+    },
+
+    "count": {
+        "data": {
+            "count": "5"
         },
         "status":"Success",
         "message":null

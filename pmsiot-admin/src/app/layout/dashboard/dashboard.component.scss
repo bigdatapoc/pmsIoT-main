@@ -14,15 +14,46 @@ agm-map {
     margin-bottom: 0 !important;
 }
 
-.notifyBtn{
-    border: 2px solid #28a745;
+.icoBtn {
     padding: 5px;
     border-radius: 5px;
     cursor: pointer;
+    width: 27px;
+    text-align: center;
+    margin-right: 3px;
+    display: inline-block;
+}
+
+.notifyBtn{
+    border: 2px solid #888;
 }
 
 .notifyBtn i{
+    color: #888;
+}
+
+.notifyBtn:hover,  {
+    border-color: #28a745;
+}
+
+.notifyBtn:hover i{
     color: #28a745;
+}
+
+.trackerBtn{
+    border: 2px solid #888;
+}
+
+.trackerBtn i{
+    color: #888;
+}
+
+.trackerBtn:hover, .trackerBtn.active {
+    border-color: #dc3545;
+}
+
+.trackerBtn:hover i, .trackerBtn.active i{
+    color: #dc3545;
 }
 
 .individual-tooltip{

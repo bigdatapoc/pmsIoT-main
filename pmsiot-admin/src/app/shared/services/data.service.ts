@@ -45,6 +45,31 @@ export class DataService {
                         );
     }
 
+    /**
+     * send notification to users
+     * @param messageObj 
+     */
+    sendNotification(messageObj): Observable<any>{
+        let obj = {
+            from: 'admin',
+            to: messageObj.id,
+            title: messageObj.titleText,
+            body: messageObj.messageText
+        };
+
+        let url = '';
+
+        if (messageObj.type == 'individual') {
+            url = this.domain + '/user/' + obj.to + '/notify';
+        } else {
+            url = this.domain + '/location/' + obj.to + '/notify';
+        }
+
+        return this.http.post( url, obj)
+                        .pipe(
+                            catchError((error: any) => Observable.throw(error.json().error || 'server error'))
+                        );
+    }
 
 
 }

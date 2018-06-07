@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { routerTransition } from '../../router.animations';
 import { DataService } from '../../shared/services/data.service';
 import { GoogleMapsAPIWrapper, MapsAPILoader, AgmMap, LatLngBounds, LatLngBoundsLiteral} from '@agm/core';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+
+import { Paho } from 'ng2-mqtt/mqttws31';
 
 declare var google: any;
 
@@ -14,6 +16,9 @@ declare var google: any;
 })
 export class DashboardComponent implements OnInit {
     
+    private _client: Paho.MQTT.Client;
+    isLiveTrackerOn = false;
+    modalRef: NgbModalRef;
     closeResult: string;
     defaultOptions = {
         lat: 28.53590728969859,
@@ -25,6 +30,8 @@ export class DashboardComponent implements OnInit {
     };
 
     messageObj = {
+        id: null,
+        type: null,
         titleText: null,
         messageText: null
     };
@@ -86,8 +93,14 @@ export class DashboardComponent implements OnInit {
 
             for (var i = 0; i < data.length; i++) {
 
-                let arr = data[i].boundary;
-                boundaries[i] = { points: [], title: data[i].name, capacity: data[i].capacity };
+                let arr = data[i].boundary;                
+                
+                boundaries[i] = { 
+                            id: data[i].id,
+                            points: [], 
+                            title: data[i].name, 
+                            capacity: data[i].capacity
+                        };
                 
                 arr.forEach((element, index) => {
                     let posData = { lat: element.latitude, lng: element.longitude };
@@ -164,29 +177,66 @@ export class DashboardComponent implements OnInit {
     /**
      * Open popup for message/notification
      */
-    openMessageModal(content, titleText, type) {
+    openMessageModal(content, titleText, type, id) {
         if (type == 'boundary') {
             this.messageObj.titleText = `Premises: ${titleText}`;
         } else {
             this.messageObj.titleText = `SAP ID: ${titleText}`;
         }
+
+        this.messageObj.type = type;
+        this.messageObj.id = id;
         
-        this.modalService.open(content).result.then((result) => {
-            this.closeResult = `Closed with: ${result}`;
-        }, (reason) => {
-            this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-        });
+        this.modalRef = this.modalService.open(content);
     }
 
-    //TODO: Remove this method and dependencies
-    private getDismissReason(reason: any): string {
-        if (reason === ModalDismissReasons.ESC) {
-            return 'by pressing ESC';
-        } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-            return 'by clicking on a backdrop';
-        } else {
-            return  `with: ${reason}`;
-        }
+    /**
+     * Send notification message
+     */
+    sendMessage() {
+        this.dataService.sendNotification(this.messageObj)
+                                    .subscribe((response) => {
+                                        if (response.status == 'Success') {
+                                            this.messageObj = {
+                                                id: null,
+                                                type: null,
+                                                titleText: null,
+                                                messageText: null
+                                            };
+                                        }
+                                    });
+        this.modalRef.close();
+    }
+
+    /**
+     * Start live user location tracking
+     * @param content 
+     * @param userId 
+     * @param index 
+     */
+    trackUser(content, userId, index) {
+        this._client = new Paho.MQTT.Client("host", 80, "path", "clientId");
+    
+        this._client.onConnectionLost = (responseObject: Object) => {
+        console.log('Connection lost.');
+        };
+        
+        this._client.onMessageArrived = (message: Paho.MQTT.Message) => {
+        console.log('Message arrived.');
+        };
+        
+        this._client.connect({ onSuccess: this.onConnected.bind(this) });
+    }
+
+    private onConnected():void {
+        console.log('Connected to broker.');
+    }
+
+    /**
+     * Stop user tracking
+     */
+    stopTracking() {
+        this._client.disconnect();
     }
     
 
