@@ -1,4 +1,4 @@
-package com.hcl.pmsiot.messaging.dto;
+package com.hcl.pmsiot.messaging.data;
 
 public class MessageDTO {
 

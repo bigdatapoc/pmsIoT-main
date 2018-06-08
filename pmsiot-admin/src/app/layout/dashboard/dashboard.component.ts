@@ -45,7 +45,7 @@ export class DashboardComponent implements OnInit {
         index: null,
         isLiveTrackerOn: false,
     };
-    successMsg = '';
+    successMsg = null;
     showSending = false;
     searchKey = null;
     locationHistory = [];
@@ -59,7 +59,7 @@ export class DashboardComponent implements OnInit {
                     private loader: MapsAPILoader,
                         private modalService: NgbModal) {
 
-        this._client = new Paho.MQTT.Client("host", 80, "", "123");
+        this._client = new Paho.MQTT.Client("192.168.1.59", 9001, "", "client_id");
 
         this._client.onConnectionLost = (responseObject: Object) => {
             console.log('Connection lost.');
@@ -68,19 +68,19 @@ export class DashboardComponent implements OnInit {
         this._client.onMessageArrived = (message: Paho.MQTT.Message) => {
             console.log('Message arrived.');
             let msg = JSON.parse(message.payloadString);
-
-            if (msg.data != undefined) {
-                if (msg.type == 'userTracking') {
-                    this.updateUserLocation(msg.data);
-                } else {
-                    this.showAdminNotification(msg.data);
-                }
-            }
+            
+			if (msg.to.indexOf('user') > -1) {
+				this.updateUserLocation(msg.data);
+			} else {
+				this.showAdminNotification(msg);
+			}
+            
 
         };
         
         this._client.connect({ onSuccess: () => {
             console.log('Connection established.');
+			this._client.subscribe('admin/notification', {}); 
         }});
     }
 
@@ -245,7 +245,7 @@ export class DashboardComponent implements OnInit {
                                             this.successMsg = 'Notification sent successfully.';
 
                                             setTimeout(() => {
-                                                this.successMsg = '';
+                                                this.successMsg = null;
                                             }, 3000);
                                         }
                                     });
@@ -259,16 +259,17 @@ export class DashboardComponent implements OnInit {
      * @param index 
      */
     trackUser(content, userId, index) {
-        this._client.subscribe('user/'+ userId, {});   
+        this._client.subscribe('user/'+ userId + '/tracking', {});   
         this.trackingObj.userId = userId;
-        this.trackingObj.isLiveTrackerOn = true;
+		this.trackingObj.index = index;
+        this.trackingObj.isLiveTrackerOn = true;		
     }
 
     /**
      * Stop user tracking
      */
     stopTracking() {
-        this._client.unsubscribe('user/' + this.trackingObj.userId, {});
+        this._client.unsubscribe('user/' + this.trackingObj.userId + '/tracking', {});
         this.trackingObj.isLiveTrackerOn = false;    
     }
 
@@ -277,9 +278,9 @@ export class DashboardComponent implements OnInit {
      * Update user location in map
      * @param data 
      */
-    updateUserLocation(data) {
-        this.markers[this.trackingObj.index].latitude = data.latitude;
-        this.markers[this.trackingObj.index].latitude = data.longitude;
+    updateUserLocation(data) {	
+        this.markers[this.trackingObj.index].latitude = Number(data.latitude);
+        this.markers[this.trackingObj.index].longitude = Number(data.longitude);
     }
     
 
@@ -288,11 +289,12 @@ export class DashboardComponent implements OnInit {
      * @param data 
      */
     showAdminNotification(data) {
-        this.adminNotifObj.message = data.message;
+		
+        this.adminNotifObj.message = data.body;
         this.adminNotifObj.showNotif = true;
         setTimeout(() => {
             this.adminNotifObj.showNotif = false;
-        }, 3000);
+        }, 4000);
     }
 
 

@@ -8,6 +8,8 @@ public class LocationDetail {
 
 	private String _id;
 
+	private String locationId;
+	
 	@Indexed(unique = true)
     private String name;
 
@@ -65,6 +67,14 @@ public class LocationDetail {
 
 	public void setLongitude(double longitude) {
 		this.longitude = longitude;
+	}
+
+	public String getLocationId() {
+		return locationId;
+	}
+
+	public void setLocationId(String locationId) {
+		this.locationId = locationId;
 	}
 
 	

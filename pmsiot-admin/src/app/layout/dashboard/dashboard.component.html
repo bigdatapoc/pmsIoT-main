@@ -50,7 +50,7 @@
                                                 <p><strong>{{polygon.title}}</strong></p>
                                                 <p><strong>Total Capacity: </strong>{{polygon.capacity}}</p>
                                                 <div>
-                                                    <a class="notifyBtn icoBtn pull-right" (click)="openMessageModal(content, polygon.title, 'boundary', polygon.id)"><i class="fa fa-bullhorn"></i></a>
+                                                    <a class="notifyBtn icoBtn pull-right" (click)="openMessageModal(content, polygon.title, 'boundary', polygon.locationId)"><i class="fa fa-bullhorn"></i></a>
                                                 </div>
                                             </div>
                                         </ng-template>
@@ -59,7 +59,7 @@
                 </ng-container>
                 
                 <ng-container *ngFor="let m of markers; let ind = index;">
-                    <agm-marker *ngIf="m.online == true" [latitude]="m.latitude" [longitude]="m.longitude" [iconUrl]="m.online == true ? markerUrl: markerUrlOffline">
+                    <agm-marker *ngIf="m.online == true" [latitude]="m.latitude" [longitude]="m.longitude" [iconUrl]="markerUrl">
                         <agm-info-window>
                             <div class="mapTooltip individual-tooltip">
                                 <p><strong>SAP ID:</strong> {{m.userId}}</p><br/>
@@ -95,7 +95,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <form role="form" id="messageForm" name="messageForm" (ngSubmit)="sendMessage()" #messageForm="ngForm">
-                        <div class="successMsg"></div>
+                        <div class="alert alert-success" *ngIf="successMsg != null">{{successMsg}}</div>
                         <fieldset class="form-group">
                             <p>{{messageObj.titleText}}</p>
                             <input type="text" class="form-control" name="messageTitle" [(ngModel)]="messageObj.messageTitle" required maxlength="60" placeholder="Enter title here" autocomplete="off"/><br/>

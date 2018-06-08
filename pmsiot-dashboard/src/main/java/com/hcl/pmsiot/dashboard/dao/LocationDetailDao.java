@@ -9,5 +9,7 @@ public interface LocationDetailDao {
 	List<LocationDetail> getAllLocation();
 
 	LocationDetail getLocationByName(String name);
+
+	LocationDetail getLocationById(String id);
 	
 }

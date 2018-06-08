@@ -2,8 +2,10 @@ package com.hcl.pmsiot.dashboard.data;
 
 public class LocationDetailData {
 
-	public LocationDetailData(String name, String capacity, BoundaryData[] boundary, double latitude, double longitude) {
+	public LocationDetailData(String locationId, String name, String capacity, BoundaryData[] boundary, double latitude,
+			double longitude) {
 		super();
+		this.locationId = locationId;
 		this.name = name;
 		this.capacity = capacity;
 		this.boundary = boundary;
@@ -11,6 +13,9 @@ public class LocationDetailData {
 		this.longitude = longitude;
 	}
 
+
+	private String locationId;
+	
 	private String name;
 
 	private String capacity;
@@ -65,8 +70,22 @@ public class LocationDetailData {
 		return new LocationDetailBuilder();
 	}
 
+	public String getLocationId() {
+		return locationId;
+	}
+
+	public void setLocationId(String locationId) {
+		this.locationId = locationId;
+	}
+
+	public void setBoundary(BoundaryData[] boundary) {
+		this.boundary = boundary;
+	}
+	
 	public static class LocationDetailBuilder {
 
+		private String locationId;
+		
 		private String name;
 
 		private String capacity;
@@ -76,6 +95,12 @@ public class LocationDetailData {
 		private double latitude;
 
 		private double longitude;
+
+
+		public LocationDetailBuilder setLocationId(String locationId) {
+			this.locationId = locationId;
+			return this;
+		}
 
 		public LocationDetailBuilder setName(String name) {
 			this.name = name;
@@ -103,7 +128,7 @@ public class LocationDetailData {
 		}
 
 		public LocationDetailData getLocationDetailData() {
-			return new LocationDetailData(this.name, this.capacity, this.boudary, this.latitude, this.longitude);
+			return new LocationDetailData(this.locationId, this.name, this.capacity, this.boudary, this.latitude, this.longitude);
 		}
 	}
 

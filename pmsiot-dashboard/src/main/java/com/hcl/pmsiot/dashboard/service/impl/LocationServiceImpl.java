@@ -27,7 +27,7 @@ public class LocationServiceImpl implements LocationService {
 
 	@Autowired
 	UserDetailDao userDetailDao;
-	
+
 	@Override
 	public List<LocationDetailData> getAllLocation() {
 
@@ -40,7 +40,8 @@ public class LocationServiceImpl implements LocationService {
 					Boundary boundary = locationDetail.getBoudary()[i];
 					boundList[i] = (new BoundaryData(boundary.getLatitude(), boundary.getLongitude()));
 				}
-				ldDataList.add(new LocationDetailData.LocationDetailBuilder().setCapacity(locationDetail.getCapacity())
+				ldDataList.add(new LocationDetailData.LocationDetailBuilder().
+						setLocationId(locationDetail.getLocationId()).setCapacity(locationDetail.getCapacity())
 						.setLatitude(locationDetail.getLatitude()).setLongitude(locationDetail.getLongitude())
 						.setName(locationDetail.getName()).setBoudary(boundList).getLocationDetailData());
 			});
@@ -49,18 +50,26 @@ public class LocationServiceImpl implements LocationService {
 	}
 
 	@Override
-	public int noOfUserInLocation(String buildingName) {
-		
-		LocationDetail locationDetail = locationDetailDao.getLocationByName(buildingName);
-		if(locationDetail == null)
-			throw new DashboardException("No location found with name "+ buildingName);
-		List<UserDetail> userDetailList = userDetailDao.getAllUsers();
-		
-		List<UserDetail> presentUsers = null;
-		if(userDetailList != null)
-			presentUsers = userDetailList.stream().filter(ud-> DashboardUtil.containsLocation(Arrays.asList(locationDetail.getBoudary()), ud.getLatitude(), ud.getLongitude(), true)).collect(Collectors.toList());
-		
+	public int noOfUserInLocation(String locationId) {
+
+		List<UserDetail> presentUsers = getUsersInLocation(locationId);
+
 		return presentUsers == null ? 0 : presentUsers.size();
-		
+
+	}
+
+	private List<UserDetail> getUsersInLocation(String locationId) {
+		LocationDetail locationDetail = locationDetailDao.getLocationById(locationId);
+		if (locationDetail == null)
+			throw new DashboardException("No location found with id " + locationId);
+		List<UserDetail> userDetailList = userDetailDao.getAllUsers();
+
+		List<UserDetail> presentUsers = null;
+		if (userDetailList != null)
+			presentUsers = userDetailList.stream()
+					.filter(ud -> DashboardUtil.containsLocation(Arrays.asList(locationDetail.getBoudary()),
+							ud.getLatitude(), ud.getLongitude(), true))
+					.collect(Collectors.toList());
+		return presentUsers;
 	}
 }

@@ -28,4 +28,10 @@ public class LocationDetailDaoImpl implements LocationDetailDao {
 		
 		return mongotemplate.findOne(new Query(Criteria.where("name").is(name)), LocationDetail.class);
 	}
+	
+	@Override
+	public LocationDetail getLocationById(String id) {
+		
+		return mongotemplate.findOne(new Query(Criteria.where("locationId").is(id)), LocationDetail.class);
+	}
 }
