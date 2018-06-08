@@ -17,7 +17,6 @@ declare var google: any;
 export class DashboardComponent implements OnInit {
     
     private _client: Paho.MQTT.Client;
-    isLiveTrackerOn = false;
     modalRef: NgbModalRef;
     closeResult: string;
     defaultOptions = {
@@ -36,6 +35,16 @@ export class DashboardComponent implements OnInit {
         messageText: null
     };
     
+    adminNotifObj = {
+        message: null,
+        showNotif: false
+    };
+
+    trackingObj = {
+        userId: null,
+        index: null,
+        isLiveTrackerOn: false,
+    };
     successMsg = '';
     showSending = false;
     searchKey = null;
@@ -49,6 +58,30 @@ export class DashboardComponent implements OnInit {
     constructor(private dataService: DataService, 
                     private loader: MapsAPILoader,
                         private modalService: NgbModal) {
+
+        this._client = new Paho.MQTT.Client("host", 80, "", "123");
+
+        this._client.onConnectionLost = (responseObject: Object) => {
+            console.log('Connection lost.');
+        };
+
+        this._client.onMessageArrived = (message: Paho.MQTT.Message) => {
+            console.log('Message arrived.');
+            let msg = JSON.parse(message.payloadString);
+
+            if (msg.data != undefined) {
+                if (msg.type == 'userTracking') {
+                    this.updateUserLocation(msg.data);
+                } else {
+                    this.showAdminNotification(msg.data);
+                }
+            }
+
+        };
+        
+        this._client.connect({ onSuccess: () => {
+            console.log('Connection established.');
+        }});
     }
 
     ngOnInit() {
@@ -226,32 +259,48 @@ export class DashboardComponent implements OnInit {
      * @param index 
      */
     trackUser(content, userId, index) {
-        this._client = new Paho.MQTT.Client("host", 80, "", "123");
-    
-        this._client.onConnectionLost = (responseObject: Object) => {
-            console.log('Connection lost.');
-        };
-        
-        this._client.onMessageArrived = (message: Paho.MQTT.Message) => {
-            console.log('Message arrived.');
-            let msg = JSON.parse(message.payloadString);
-            this.markers[index].latitude = msg.data.latitude;
-            this.markers[index].latitude = msg.data.longitude;
-        };
-        
-        this._client.connect({ onSuccess: () => {
-            this._client.subscribe('user/'+ userId, {});   
-            this.isLiveTrackerOn = true;    
-        }});
+        this._client.subscribe('user/'+ userId, {});   
+        this.trackingObj.userId = userId;
+        this.trackingObj.isLiveTrackerOn = true;
     }
 
     /**
      * Stop user tracking
      */
     stopTracking() {
-        this._client.disconnect();
-        this.isLiveTrackerOn = false;    
+        this._client.unsubscribe('user/' + this.trackingObj.userId, {});
+        this.trackingObj.isLiveTrackerOn = false;    
+    }
+
+
+    /**
+     * Update user location in map
+     * @param data 
+     */
+    updateUserLocation(data) {
+        this.markers[this.trackingObj.index].latitude = data.latitude;
+        this.markers[this.trackingObj.index].latitude = data.longitude;
     }
     
+
+    /**
+     * show admin notification
+     * @param data 
+     */
+    showAdminNotification(data) {
+        this.adminNotifObj.message = data.message;
+        this.adminNotifObj.showNotif = true;
+        setTimeout(() => {
+            this.adminNotifObj.showNotif = false;
+        }, 3000);
+    }
+
+
+    /**
+     * Close admin notification
+     */
+    closeNotif() {
+        this.adminNotifObj.showNotif = false;  
+    }
 
 }

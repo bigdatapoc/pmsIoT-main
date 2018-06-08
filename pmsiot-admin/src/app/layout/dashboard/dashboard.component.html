@@ -1,6 +1,8 @@
 <div [@routerTransition]>
     <div class="row">
+
         <div class="col-md-12">
+            <div class="alert alert-info" *ngIf="adminNotifObj.showNotif">{{adminNotifObj.message}}<a (click)="closeNotif()" class="pull-right text-danger" role="button"><i class="fa fa-times"></i></a></div>
             <form id="searchForm" name="searchForm" (ngSubmit)="searchUser()" #searchForm="ngForm">
                 <div class="col-md-4 input-group form-div">
                     
@@ -17,8 +19,8 @@
                 </div>
             </form>
 
-            <div class="tracker-div" *ngIf="isLiveTrackerOn == true">
-                <span><i class="fa fa-map-marker"></i>Tracking SAP ID: {{trackingId}}</span>  
+            <div class="tracker-div" *ngIf="trackingObj.isLiveTrackerOn == true">
+                <span><i class="fa fa-map-marker"></i>Tracking SAP ID: {{trackingObj.userId}}</span>  
                 <a class="trackerLink" (click)="stopTracking()">&nbsp;Stop</a>
             </div>
         </div>
