@@ -39,7 +39,7 @@ export class DataService {
      */
     getUserById(sapId): Observable<any>{
 
-        return this.http.get( this.domain + '/userDetails')
+        return this.http.get( this.domain + '/user/'+sapId)
                         .pipe(
                             catchError((error: any) => Observable.throw(error.json().error || 'server error'))
                         );

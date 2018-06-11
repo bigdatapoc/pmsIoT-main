@@ -61,7 +61,7 @@ export class DashboardComponent implements OnInit {
                     private loader: MapsAPILoader,
                         private modalService: NgbModal) {
 
-        this._client = new Paho.MQTT.Client("192.168.1.59", 9001, "", "client_id");
+        this._client = new Paho.MQTT.Client("test.mosquitto.org", 8080, "", "client_id1111111");
 
         this._client.onConnectionLost = (responseObject: Object) => {
             console.log('Connection lost.');
@@ -339,5 +339,9 @@ export class DashboardComponent implements OnInit {
     closeNotif() {
         this.adminNotifObj.showNotif = false;  
     }
+	
+	getCurrentCount(id) {
+		
+	}
 
 }
