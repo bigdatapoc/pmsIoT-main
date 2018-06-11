@@ -54,6 +54,8 @@ export class DashboardComponent implements OnInit {
     markerUrlOffline: string = 'assets/images/marker-person.png';
     markers = [];
     boundaries = [];
+    heatmap = null;
+    showHeatMap = false;
 
     constructor(private dataService: DataService, 
                     private loader: MapsAPILoader,
@@ -87,6 +89,8 @@ export class DashboardComponent implements OnInit {
     ngOnInit() {
         this.getAllUsers();
         this.getLocations();
+
+        
     }
 
     /**
@@ -99,7 +103,6 @@ export class DashboardComponent implements OnInit {
                             .subscribe((response) => {
                                 if (response.status == 'Success') {
                                     this.markers = response.data;
-                                    this.userMap.fitBounds(this.findStoresBounds());
                                 }
                             });
     }
@@ -145,10 +148,42 @@ export class DashboardComponent implements OnInit {
             }
 
             this.boundaries = boundaries;
+
+            this.heatmap = new google.maps.visualization.HeatmapLayer({
+                data: this.getHeatmapPoints(),
+                map: this.userMap
+            });
             
         });
 
     }
+
+
+    /**
+     * prepare heat map points
+     */
+    getHeatmapPoints() {
+        let arr = [];
+        
+        for (var i = 0; i < this.markers.length; i++) {
+            arr.push(new google.maps.LatLng(this.markers[i].latitude, this.markers[i].longitude))
+        }
+
+        return arr;
+    }
+
+
+    toggleHeatmap() {
+
+        this.showHeatMap = !this.showHeatMap;
+
+        if (this.showHeatMap) {
+            this.heatmap.setMap(this.userMap);
+        } else {
+            this.heatmap.setMap(null);
+        }
+    }
+
 
     /**
      * Adjust popup position on polygon clicked

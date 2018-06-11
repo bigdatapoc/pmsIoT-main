@@ -16,7 +16,8 @@ import { DataService } from '../../shared/services/data.service';
         CommonModule,
         DashboardRoutingModule,
         AgmCoreModule.forRoot({
-          apiKey: 'AIzaSyBvWWRmC-p1HA0E6Qp-Kfn2EThCeT2gjsA'
+          apiKey: 'AIzaSyBvWWRmC-p1HA0E6Qp-Kfn2EThCeT2gjsA',
+          libraries: ['visualization']
         }),
         AgmSnazzyInfoWindowModule,
         StatModule,
