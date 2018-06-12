@@ -137,7 +137,7 @@ export class DashboardComponent implements OnInit {
                 let arr = data[i].boundary;                
                 
                 boundaries[i] = { 
-                            id: data[i].id,
+                            locationId: data[i].locationId,
                             points: [], 
                             title: data[i].name, 
                             capacity: data[i].capacity
