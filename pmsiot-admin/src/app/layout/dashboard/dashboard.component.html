@@ -33,9 +33,9 @@
                 <ng-container *ngIf="locationHistory.length == 0">            
                     <agm-polygon *ngFor="let polygon of boundaries; let i = index;" 
                                     [paths]="polygon.points"
-                                    [strokeColor]="'#1E90FF'"
-                                    [fillColor]="'#87CEEB'"
-                                    [clickable]="true"
+                                    [strokeColor]="master?'#1E90FF': '#28a745'"
+                                    [fillColor]="master?'':'#87CEEB'"
+                                    [clickable]="!master"
                                     (polyClick)="polygonClicked($event)">   
 
                         <agm-snazzy-info-window [latitude]="defaultOptions.polygonLat" 
@@ -59,8 +59,8 @@
                 
                 <ng-container *ngIf="!showHeatMap">
                     <ng-container *ngFor="let m of markers; let ind = index;">
-                        <agm-marker *ngIf="m.online == true" [latitude]="m.latitude" [longitude]="m.longitude" [iconUrl]="markerUrl">
-                            <agm-info-window>
+                        <agm-marker *ngIf="m.online == true" [latitude]="m.latitude" [longitude]="m.longitude" [iconUrl]="markerUrl" (markerClick)="openIW(infoWindow)">
+                            <agm-info-window #infoWindow>
                                 <div class="mapTooltip individual-tooltip">
                                     <p><strong>SAP ID:</strong> {{m.userId}}</p><br/>
                                     <div>
