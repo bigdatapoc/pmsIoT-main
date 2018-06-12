@@ -33,12 +33,13 @@
                 <ng-container *ngIf="locationHistory.length == 0">            
                     <agm-polygon *ngFor="let polygon of boundaries; let i = index;" 
                                     [paths]="polygon.points"
-                                    [strokeColor]="master?'#1E90FF': '#28a745'"
-                                    [fillColor]="master?'':'#87CEEB'"
-                                    [clickable]="!master"
+                                    [strokeColor]="polygon.strokeColor"
+                                    [fillColor]="'#87CEEB'"
+                                    [clickable]="polygon.clickable"
+									[fillOpacity]="polygon.opacity"
                                     (polyClick)="polygonClicked($event)">   
 
-                        <agm-snazzy-info-window [latitude]="defaultOptions.polygonLat" 
+                        <agm-snazzy-info-window *ngIf="!polygon.master" [latitude]="defaultOptions.polygonLat" 
                                         [longitude]="defaultOptions.polygonLng" 
                                         [isOpen]="defaultOptions.isPolygonOpen"
                                         (beforeOpen)="getCurrentCount(polygon.locationId)"

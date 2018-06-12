@@ -91,7 +91,7 @@ export class DashboardComponent implements OnInit {
     }
 
     ngOnInit() {
-
+		this.getAllUsers();
         setInterval(() => {
             this.getAllUsers();
         }, 60000);
@@ -146,6 +146,16 @@ export class DashboardComponent implements OnInit {
                             capacity: data[i].capacity,
                             master: data[i].master
                         };
+						
+				boundaries[i]['clickable'] = !data[i].master;
+				
+				if (data[i].master) {
+					boundaries[i]['strokeColor'] = '#1E90FF';
+					boundaries[i]['fillOpacity'] = 0;
+				} else {
+					boundaries[i]['strokeColor'] = '#28a745';
+					boundaries[i]['fillOpacity'] = 0.4;
+				}
                 
                 arr.forEach((element, index) => {
                     let posData = { lat: element.latitude, lng: element.longitude };
@@ -153,7 +163,7 @@ export class DashboardComponent implements OnInit {
                 });
 
             }
-
+			
             this.boundaries = boundaries;
 
             this.heatmap = new google.maps.visualization.HeatmapLayer({
