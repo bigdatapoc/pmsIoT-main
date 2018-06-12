@@ -58,6 +58,7 @@ export class DashboardComponent implements OnInit {
     heatmap = null;
     showHeatMap = false;
     currentCount = null;
+    infoWindow;
 
     constructor(private dataService: DataService, 
                     private loader: MapsAPILoader,
@@ -90,10 +91,12 @@ export class DashboardComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.getAllUsers();
-        this.getLocations();
 
+        setInterval(() => {
+            this.getAllUsers();
+        }, 60000);
         
+        this.getLocations();        
     }
 
     /**
@@ -140,7 +143,8 @@ export class DashboardComponent implements OnInit {
                             locationId: data[i].locationId,
                             points: [], 
                             title: data[i].name, 
-                            capacity: data[i].capacity
+                            capacity: data[i].capacity,
+                            master: data[i].master
                         };
                 
                 arr.forEach((element, index) => {
@@ -345,7 +349,11 @@ export class DashboardComponent implements OnInit {
     closeNotif() {
         this.adminNotifObj.showNotif = false;  
     }
-	
+    
+    /**
+     * get current count of location
+     * @param id location id
+     */
 	getCurrentCount(id) {
 		this.dataService.getLocationCount(id)
                             .subscribe((response) => {
@@ -353,6 +361,15 @@ export class DashboardComponent implements OnInit {
                                     this.currentCount = response.data.count;
                                 }
                             });
-	}
+    }
+    
+
+    openIW(data) {
+        if(this.infoWindow){
+            this.infoWindow.close();
+        }
+
+        this.infoWindow = data;
+    }
 
 }
