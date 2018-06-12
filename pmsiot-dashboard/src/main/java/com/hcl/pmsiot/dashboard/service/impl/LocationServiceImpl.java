@@ -43,7 +43,7 @@ public class LocationServiceImpl implements LocationService {
 				ldDataList.add(new LocationDetailData.LocationDetailBuilder().
 						setLocationId(locationDetail.getLocationId()).setCapacity(locationDetail.getCapacity())
 						.setLatitude(locationDetail.getLatitude()).setLongitude(locationDetail.getLongitude())
-						.setName(locationDetail.getName()).setBoudary(boundList).getLocationDetailData());
+						.setMaster(locationDetail.isMaster()).setName(locationDetail.getName()).setBoudary(boundList).getLocationDetailData());
 			});
 		}
 		return ldDataList;

@@ -3,7 +3,7 @@ package com.hcl.pmsiot.dashboard.data;
 public class LocationDetailData {
 
 	public LocationDetailData(String locationId, String name, String capacity, BoundaryData[] boundary, double latitude,
-			double longitude) {
+			double longitude, boolean master) {
 		super();
 		this.locationId = locationId;
 		this.name = name;
@@ -11,6 +11,7 @@ public class LocationDetailData {
 		this.boundary = boundary;
 		this.latitude = latitude;
 		this.longitude = longitude;
+		this.master = master;
 	}
 
 
@@ -26,6 +27,8 @@ public class LocationDetailData {
 
 	private double longitude;
 
+	private boolean master;
+	
 	public String getName() {
 		return name;
 	}
@@ -82,6 +85,14 @@ public class LocationDetailData {
 		this.boundary = boundary;
 	}
 	
+	public boolean isMaster() {
+		return master;
+	}
+
+	public void setMaster(boolean master) {
+		this.master = master;
+	}
+
 	public static class LocationDetailBuilder {
 
 		private String locationId;
@@ -96,6 +107,12 @@ public class LocationDetailData {
 
 		private double longitude;
 
+		private boolean master;
+
+		public LocationDetailBuilder setMaster(boolean master) {
+			this.master = master;
+			return this;
+		}
 
 		public LocationDetailBuilder setLocationId(String locationId) {
 			this.locationId = locationId;
@@ -128,7 +145,7 @@ public class LocationDetailData {
 		}
 
 		public LocationDetailData getLocationDetailData() {
-			return new LocationDetailData(this.locationId, this.name, this.capacity, this.boudary, this.latitude, this.longitude);
+			return new LocationDetailData(this.locationId, this.name, this.capacity, this.boudary, this.latitude, this.longitude, this.master);
 		}
 	}
 

@@ -21,7 +21,17 @@ public class LocationDetail {
 	
     private double longitude;
     
-    public String get_id() {
+    private boolean master;
+    
+    public boolean isMaster() {
+		return master;
+	}
+
+	public void setMaster(boolean master) {
+		this.master = master;
+	}
+
+	public String get_id() {
 		return _id;
 	}
 
