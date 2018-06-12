@@ -3,6 +3,7 @@ import { routerTransition } from '../../router.animations';
 import { DataService } from '../../shared/services/data.service';
 import { GoogleMapsAPIWrapper, MapsAPILoader, AgmMap, LatLngBounds, LatLngBoundsLiteral} from '@agm/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NotificationsService } from 'angular2-notifications';
 
 import { Paho } from 'ng2-mqtt/mqttws31';
 
@@ -56,10 +57,12 @@ export class DashboardComponent implements OnInit {
     boundaries = [];
     heatmap = null;
     showHeatMap = false;
+    currentCount = null;
 
     constructor(private dataService: DataService, 
                     private loader: MapsAPILoader,
-                        private modalService: NgbModal) {
+                    private modalService: NgbModal,
+                    private _notifications: NotificationsService) {
 
         this._client = new Paho.MQTT.Client("test.mosquitto.org", 8080, "", "client_id1111111");
 
@@ -324,12 +327,15 @@ export class DashboardComponent implements OnInit {
      * @param data 
      */
     showAdminNotification(data) {
-		
-        this.adminNotifObj.message = data.body;
-        this.adminNotifObj.showNotif = true;
-        setTimeout(() => {
-            this.adminNotifObj.showNotif = false;
-        }, 4000);
+        
+        this._notifications.create(
+            '',
+            data.body,
+            'info',
+            {
+                timeOut: 4000
+            }
+        )
     }
 
 
@@ -341,7 +347,12 @@ export class DashboardComponent implements OnInit {
     }
 	
 	getCurrentCount(id) {
-		
+		this.dataService.getLocationCount(id)
+                            .subscribe((response) => {
+                                if (response.status == 'Success') {
+                                    this.currentCount = response.data.count;
+                                }
+                            });
 	}
 
 }

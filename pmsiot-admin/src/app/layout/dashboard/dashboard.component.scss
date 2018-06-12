@@ -1,5 +1,5 @@
 agm-map {
-    height: 450px;
+    height: 90vh;
 }
 
 #searchButton{
@@ -69,9 +69,9 @@ agm-map {
     border: 2px solid #dc3545;
     border-radius: 5px;
     color: #dc3545;
-    padding: 4px;
     font-weight: bold;
-    font-size: 15px;
+    font-size: 13px;
+    margin-right: 14px;
 }
 
 .tracker-div i{
@@ -95,6 +95,18 @@ agm-map {
 
 .tracker-div a{
     cursor: pointer;
+    display: inline-block;
+    background: #dc3545;
+    color: #fff;
+    padding: 4px;
+    border-radius: 3px;
+}
+
+.top-bar{
+    position: fixed;
+    z-index: 999;
+    padding: 10px;
+    opacity: 0.8;
 }
 
 @keyframes blinker {

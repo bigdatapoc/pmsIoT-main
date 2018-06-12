@@ -71,6 +71,18 @@ export class DataService {
                         );
     }
 
+    /**
+     * get current count of people at location 
+     * @param locId location Id 
+     */
+    getLocationCount(locId): Observable<any>{
+
+        return this.http.get( this.domain + '/location/'+locId+'/count')
+                        .pipe(
+                            catchError((error: any) => Observable.throw(error.json().error || 'server error'))
+                        );
+    }
+
 
 }
 

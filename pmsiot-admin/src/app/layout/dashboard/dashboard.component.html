@@ -1,7 +1,6 @@
 <div [@routerTransition]>
     <div class="row">
-
-        <div class="col-md-12">
+        <div class="col-md-12 top-bar">
             <div class="alert alert-info" *ngIf="adminNotifObj.showNotif">{{adminNotifObj.message}}<a (click)="closeNotif()" class="pull-right text-danger" role="button"><i class="fa fa-times"></i></a></div>
             <form id="searchForm" name="searchForm" (ngSubmit)="searchUser()" #searchForm="ngForm">
                 <div class="col-md-4 input-group form-div">
@@ -25,7 +24,6 @@
             </div>
         </div>
     </div>
-    <br/><br/>
     <div class="row">
         <div class="col-md-12">
             <agm-map [latitude]="defaultOptions.lat" 
@@ -43,12 +41,13 @@
                         <agm-snazzy-info-window [latitude]="defaultOptions.polygonLat" 
                                         [longitude]="defaultOptions.polygonLng" 
                                         [isOpen]="defaultOptions.isPolygonOpen"
-                                        (beforeOpen)="getCurrentCount(polygon.id)"
+                                        (beforeOpen)="getCurrentCount(polygon.locationId)"
                                         (afterClose)="updateState()"> 
                                         <ng-template>
                                             <div class="mapTooltip">
                                                 <p><strong>{{polygon.title}}</strong></p>
                                                 <p><strong>Total Capacity: </strong>{{polygon.capacity}}</p>
+                                                <p><strong>Current Count: </strong>{{currentCount}}</p>
                                                 <div>
                                                     <a class="notifyBtn icoBtn pull-right" (click)="openMessageModal(content, polygon.title, 'boundary', polygon.locationId)"><i class="fa fa-bullhorn"></i></a>
                                                 </div>
@@ -117,3 +116,4 @@
         
     </ng-template>
 </div>
+<simple-notifications></simple-notifications>

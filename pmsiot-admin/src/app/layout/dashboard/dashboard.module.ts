@@ -10,6 +10,7 @@ import { DashboardComponent } from './dashboard.component';
 
 import { StatModule } from '../../shared';
 import { DataService } from '../../shared/services/data.service';
+import { SimpleNotificationsModule } from 'angular2-notifications';
 
 @NgModule({
     imports: [
@@ -22,7 +23,8 @@ import { DataService } from '../../shared/services/data.service';
         AgmSnazzyInfoWindowModule,
         StatModule,
         NgbModule.forRoot(),
-        FormsModule
+        FormsModule,
+        SimpleNotificationsModule.forRoot()
     ],
     declarations: [
         DashboardComponent
