@@ -31,7 +31,7 @@ import kafka.serializer.StringDecoder;
 import scala.Tuple2;
 
 @Service
-public class AdminMessagingKafkaConsumer {
+public class MessagingKafkaSubscriber {
 
 	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
@@ -46,6 +46,9 @@ public class AdminMessagingKafkaConsumer {
 
 	@Value("${kafka.broker.topic.user.location.tracking}")
 	private String userLocationTrackingTopic;
+	
+	@Value("${kafka.broker.topic.user.location.nearby}")
+	private String userLocationNearbyTopic;
 	
 	@Autowired
 	private JavaStreamingContext jssc;
@@ -65,7 +68,7 @@ public class AdminMessagingKafkaConsumer {
 
 	public void startStreaming() throws UnknownHostException, InterruptedException {
 
-		Set<String> topicsSet = new HashSet<String>(Arrays.asList(new String[] {kafkaAdminNotificationTopic, userLocationTrackingTopic}));
+		Set<String> topicsSet = new HashSet<String>(Arrays.asList(new String[] {kafkaAdminNotificationTopic, userLocationTrackingTopic, userLocationNearbyTopic}));
 		HashMap<String, String> kafkaParams = new HashMap<String, String>();
 		kafkaParams.put("metadata.broker.list", kafkaBrokerUrl);
 		kafkaParams.put("auto.create.topics.enable", "true");

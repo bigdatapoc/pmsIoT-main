@@ -2,6 +2,8 @@ package com.hcl.pmsiot.messaging.data;
 
 import java.util.Map;
 
+import com.google.gson.Gson;
+
 public class NotificationData {
 
 	private String to;
@@ -52,5 +54,11 @@ public class NotificationData {
 
 	public void setData(Map<String, String> data) {
 		this.data = data;
+	}
+	
+	@Override
+	public String toString() {
+		Gson gson = new Gson();
+		return gson.toJson(this);
 	}
 }

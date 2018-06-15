@@ -10,7 +10,7 @@ import java.util.List;
 
 import com.hcl.pmsiot.operation.model.Boundary;
 
-public class OperationUtil {
+public class PolygonOperationUtil {
 
 
 	public static boolean containsLocation(List<Boundary> polygon, double lat, double lng, boolean geodesic) {

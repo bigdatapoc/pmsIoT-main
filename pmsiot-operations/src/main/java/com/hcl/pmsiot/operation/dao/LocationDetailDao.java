@@ -25,4 +25,9 @@ public class LocationDetailDao  {
 		
 		return mongotemplate.findOne(new Query(Criteria.where("name").is(name)), LocationDetail.class);
 	}
+	
+	public LocationDetail getLocationMaster() {
+		
+		return mongotemplate.findOne(new Query(Criteria.where("master").is(true)), LocationDetail.class);
+	}
 }

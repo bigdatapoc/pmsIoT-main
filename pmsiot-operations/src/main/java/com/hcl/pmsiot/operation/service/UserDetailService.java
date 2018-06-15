@@ -3,11 +3,13 @@ package com.hcl.pmsiot.operation.service;
 import java.io.Serializable;
 import java.net.UnknownHostException;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.Function;
@@ -25,16 +27,19 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.hcl.pmsiot.operation.dao.LocationDetailDao;
 import com.hcl.pmsiot.operation.dao.UserDetailDao;
 import com.hcl.pmsiot.operation.data.FirebasePushNotificationData;
 import com.hcl.pmsiot.operation.data.NotificationData;
 import com.hcl.pmsiot.operation.model.LocationDetail;
 import com.hcl.pmsiot.operation.model.UserDetail;
-import com.hcl.pmsiot.operation.util.OperationUtil;
+import com.hcl.pmsiot.operation.util.LatLngDistanceCalculatorUtil;
+import com.hcl.pmsiot.operation.util.PolygonOperationUtil;
 
 import kafka.serializer.StringDecoder;
 import scala.Tuple2;
+import java.lang.reflect.Type;
 
 /**
  * Consumes messages from one or more topics in Kafka and does save data to
@@ -55,7 +60,7 @@ public final class UserDetailService implements Serializable {
 
 	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 	
-	private static LocationDetail hclLocationDetail;
+	private static LocationDetail masterLocationDetail;
 	
 	@Autowired
 	private JavaStreamingContext jssc;
@@ -74,6 +79,19 @@ public final class UserDetailService implements Serializable {
 	
 	@Value("${kafka.broker.topic.user.location.tracking}")
 	private String userLocationTrackingTopic;
+	
+	@Value("${kafka.broker.topic.user.location.nearby}")
+	private String userLocationNearbyTopic;
+	
+	@Value("${mqtt.broker.topic.user.location.tracking}")
+	private String mqttUserLocationTrackingTopic;
+	
+	@Value("${mqtt.broker.topic.user.location.nearby}")
+	private String mqttUserLocationNearbyTopic;
+	 
+	
+	@Value("${radius}")
+	private int nearbyRadius;
 	
 	@Autowired
 	private UserDetailDao userDetailDao;
@@ -121,12 +139,13 @@ public final class UserDetailService implements Serializable {
 						try {
 							UserDetail userDetail = gson.fromJson(str, UserDetail.class);
 							
-							if(hclLocationDetail == null)
-								hclLocationDetail =  locationDetailDao.getLocationByName("Hcl");
-							userDetail.setOnline(OperationUtil.containsLocation(Arrays.asList(hclLocationDetail.getBoudary()), userDetail.getLatitude(), userDetail.getLongitude(),true));
+							if(masterLocationDetail == null)
+								masterLocationDetail =  locationDetailDao.getLocationMaster();
+							userDetail.setOnline(PolygonOperationUtil.containsLocation(Arrays.asList(masterLocationDetail.getBoudary()), userDetail.getLatitude(), userDetail.getLongitude(),true));
 							if(userDetail.isOnline()) {
 								userDetailDao.updateUserLocation(userDetail);
 								sendLiveLocationNotification(userDetail);
+								sendNearbyLocationNotification(userDetail);
 							} else {
 								userDetailDao.updateUserAvailability(userDetail);
 								sendUserOfflineNotification(userDetail.getUserId());
@@ -140,6 +159,8 @@ public final class UserDetailService implements Serializable {
 				}
 
 			}
+
+			
 		});
 
 		// Start the computation
@@ -164,7 +185,7 @@ public final class UserDetailService implements Serializable {
 		//firebaseNotification(userId);
 		NotificationData notificationData = new NotificationData();
 		notificationData.setTitle("Live location");
-		notificationData.setTo(MessageFormat.format("user/{0}/tracking", userDetail.getUserId()));
+		notificationData.setTo(MessageFormat.format(mqttUserLocationTrackingTopic, userDetail.getUserId()));
 		notificationData.setFrom(userDetail.getUserId());
 		Map<String, String> data = new HashMap<String, String>();
 		data.put("latitude", ""+userDetail.getLatitude());
@@ -175,6 +196,32 @@ public final class UserDetailService implements Serializable {
 		
 	}
 
+	private void sendNearbyLocationNotification(UserDetail userDetail) {
+		
+		
+		List<LocationDetail> locationDetails = locationDetailDao.getAllLocation();
+		List<LocationDetail> nearByLocation = new ArrayList<>();
+		if(locationDetails != null) {
+			nearByLocation = locationDetails.stream().filter(location -> 
+				LatLngDistanceCalculatorUtil.isWithinDistance(userDetail.getLatitude(), userDetail.getLongitude(), location.getLatitude(), location.getLongitude(), nearbyRadius)
+			).collect(Collectors.toList());
+		}
+		if(nearByLocation.size() > 0) {
+			NotificationData notificationData = new NotificationData();
+			notificationData.setTitle("Nearby location");
+			notificationData.setTo(MessageFormat.format(mqttUserLocationNearbyTopic, userDetail.getUserId()));
+			notificationData.setFrom(userDetail.getUserId());
+			Gson gson = new Gson();
+			Map<String, String> dataMap = new HashMap<>();
+			Type collectionType = new TypeToken<List<LocationDetail>>(){}.getType();
+			dataMap.put("nearby", gson.toJson(nearByLocation, collectionType));
+			notificationData.setData(dataMap);
+			kafkaTemplate.send(userLocationNearbyTopic, gson.toJson(notificationData));
+		}
+		
+		
+	}
+	
 	private void firebaseNotification(String userId) {
 		
 		FirebasePushNotificationData notificationData = new FirebasePushNotificationData();

@@ -9,25 +9,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hcl.pmsiot.messaging.data.MessageDTO;
 import com.hcl.pmsiot.messaging.data.NotificationData;
-import com.hcl.pmsiot.messaging.service.MqttNotificationService;
-import com.hcl.pmsiot.messaging.service.UserMessagingKafkaProducer;
+import com.hcl.pmsiot.messaging.data.UserDetailData;
+import com.hcl.pmsiot.messaging.service.MessagingService;
 
 @RestController
 public class MqttKafkaController {
 
 	@Autowired
-	UserMessagingKafkaProducer userMessagingKafkaProducer;
-	
-	@Autowired
-	MqttNotificationService notificationService;
+	MessagingService messagingService;
 	
 	@RequestMapping(value = "/user/location", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> addMqttMsg(@RequestBody MessageDTO messageDTO) throws Exception {
+	public ResponseEntity<?> userLocation(@RequestBody UserDetailData userDetail) throws Exception {
 		
 		ResponseEntity<?> responseEntity = null;
-		userMessagingKafkaProducer.publishMesssage(messageDTO);
+		messagingService.publishUserLocation(userDetail);
 		responseEntity = new ResponseEntity<>("successfully published and consumed msg", HttpStatus.OK);
 		return responseEntity;
 	}
@@ -43,7 +39,7 @@ public class MqttKafkaController {
 	@RequestMapping(value = "/user/notification", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> sendNotification(@RequestBody NotificationData notificationData) {
 		ResponseEntity<?> responseEntity = null;
-		notificationService.sendUserNotification(notificationData);
+		messagingService.sendUserNotification(notificationData);
 		responseEntity = new ResponseEntity<>(true, HttpStatus.OK);
 		return responseEntity;
 	}

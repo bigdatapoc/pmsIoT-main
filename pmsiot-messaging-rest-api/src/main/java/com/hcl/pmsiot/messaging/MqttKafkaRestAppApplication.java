@@ -20,7 +20,7 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 
-import com.hcl.pmsiot.messaging.service.AdminMessagingKafkaConsumer;
+import com.hcl.pmsiot.messaging.service.MessagingKafkaSubscriber;
 import com.hcl.pmsiot.messaging.service.UserMessagingKafkaConsumer;
 
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -37,7 +37,7 @@ public class MqttKafkaRestAppApplication implements CommandLineRunner{
 	private String mqttClientUrl;
 	
 	@Autowired
-	private AdminMessagingKafkaConsumer adminMessagingService;
+	private MessagingKafkaSubscriber adminMessagingService;
 	
 	@Autowired
 	private UserMessagingKafkaConsumer userMessagingService;
