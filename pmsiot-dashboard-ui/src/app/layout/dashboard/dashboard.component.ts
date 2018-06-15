@@ -223,7 +223,7 @@ export class DashboardComponent implements OnInit {
     /**
      * Search user based on SAP ID
      */
-    searchUser(map) {
+    searchUser() {
 
         if (this.searchKey == '') {
             alert('Please enter SAP ID');

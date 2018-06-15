@@ -6,8 +6,8 @@
         "ng": "ng",
         "start": "ng serve",
         "build": "ng build --prod",
-        "gitbuild": "ng build --prod --base-href /start-angular/SB-Admin-BS4-Angular-6/master/dist/",
         "test": "ng test",
+        "prod": "ng build --prod --base-href /",
         "lint": "ng lint",
         "e2e": "ng e2e"
     },
