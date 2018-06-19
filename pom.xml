@@ -17,13 +17,13 @@
 
 
 	<modules>
-		<module>pmsiot-processing-engine</module>
 		<module>pmsiot-messaging-rest-api</module>
 		<module>pmsiot-mqtt-connector</module>
-		<module>pmsiot-sink</module>
-		<module>pmsiot-operations</module>
-		<module>pmsiot-eureka-server</module>
 		<module>pmsiot-dashboard</module>
+		<module>pmsiot-operations</module>
+		<!--  <module>pmsiot-eureka-server</module>
+		<module>pmsiot-sink</module>
+		<module>pmsiot-processing-engine</module>-->
 	</modules>
 
 	<properties>
@@ -60,6 +60,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			
 		</plugins>
 	</build>
 

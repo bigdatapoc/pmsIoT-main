@@ -21,7 +21,7 @@ public class UserLocationMqttCallBack implements MqttCallback {
 
 	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-	@Value("{pmsiot.messaging.host}")
+	@Value("${pmsiot.messaging.host}")
 	private String messaginghostUrl;
 	
 	public void connectionLost(Throwable throwable) {

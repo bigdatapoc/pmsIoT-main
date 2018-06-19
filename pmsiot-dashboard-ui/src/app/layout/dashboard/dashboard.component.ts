@@ -65,7 +65,7 @@ export class DashboardComponent implements OnInit {
                     private modalService: NgbModal,
                     private _notifications: NotificationsService) {
 
-        this._client = new Paho.MQTT.Client("test.mosquitto.org", 8080, "", "client_id1111111");
+        this._client = new Paho.MQTT.Client("192.168.99.100", 9001, "", "client_admin");
 
         this._client.onConnectionLost = (responseObject: Object) => {
             console.log('Connection lost.');
